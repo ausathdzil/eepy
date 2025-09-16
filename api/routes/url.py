@@ -33,10 +33,10 @@ def shorten_url(url_in: UrlCreate, session: SessionDep):
 
 
 @router.get("/", response_model=UrlsPublic)
-def read_urls(session: SessionDep, offset: int = 0, limit: int = 10) -> UrlsPublic:
+def read_urls(session: SessionDep) -> UrlsPublic:
     count_statement = select(func.count()).select_from(Url)
     count = session.exec(count_statement).one()
-    statement = select(Url).offset(offset).limit(limit)
+    statement = select(Url)
     urls = session.exec(statement).all()
     return UrlsPublic(data=urls, count=count)
 
