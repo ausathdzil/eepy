@@ -1,5 +1,5 @@
 import tailwindcss from '@tailwindcss/vite';
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
@@ -12,6 +12,7 @@ export default defineConfig({
           groups: [
             { name: 'react', test: '/node_modules[\\/]react/' },
             { name: 'react-dom', test: '/node_modules[\\/]react-dom/' },
+            { name: 'swr', test: '/node_modules[\\/]swr/' },
           ],
         },
       },
@@ -21,4 +22,7 @@ export default defineConfig({
     transformer: 'lightningcss',
   },
   plugins: [react(), tailwindcss()],
+  preview: {
+    port: 5173,
+  },
 });

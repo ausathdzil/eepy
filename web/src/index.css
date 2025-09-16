@@ -34,8 +34,6 @@
   --sidebar-border: oklch(0.8973 0.0014 106.4264);
   --sidebar-ring: oklch(0.6057 0.1814 255.7713);
   --font-sans: Inter;
-  --font-serif: Lora;
-  --font-mono: Fira Code;
   --radius: 0.3rem;
   --shadow-2xs: 0px 2px 12px 0px hsl(0 0% 0% / 0.03);
   --shadow-xs: 0px 2px 12px 0px hsl(0 0% 0% / 0.03);
