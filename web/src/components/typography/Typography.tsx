@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils.ts';
 import styles from './typography.module.css';
 
 export function TypographyH1({ className, ...props }: ComponentProps<'h1'>) {

@@ -8,9 +8,9 @@ export function MainContainer({ className, ...props }: ComponentProps<'main'>) {
 }
 
 type StackProps = ComponentProps<'div'> & {
-  align: CSSProperties['alignContent'];
-  direction: CSSProperties['flexDirection'];
-  gap: CSSProperties['gap'];
+  align?: CSSProperties['alignItems'];
+  direction?: CSSProperties['flexDirection'];
+  gap?: CSSProperties['gap'];
 };
 
 export function Stack({
@@ -18,15 +18,17 @@ export function Stack({
   direction = 'column',
   gap,
   className,
+  style,
   ...props
-}: Partial<StackProps>) {
+}: StackProps) {
   return (
     <div
       className={cn(styles.stack, className)}
       style={{
-        alignContent: align,
+        alignItems: align,
         flexDirection: direction,
         gap,
+        ...style,
       }}
       {...props}
     />
