@@ -11,6 +11,7 @@ export default defineConfig({
       output: {
         advancedChunks: {
           groups: [
+            { name: 'lucide-react', test: '/node_modules[\\/]lucide-react/' },
             { name: 'react', test: '/node_modules[\\/]react/' },
             { name: 'react-dom', test: '/node_modules[\\/]react-dom/' },
             { name: 'react-router', test: '/node_modules[\\/]react-router/' },

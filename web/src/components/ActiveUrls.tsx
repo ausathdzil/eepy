@@ -2,6 +2,7 @@ import useSWR from 'swr';
 
 import { getActiveUrls } from '@/lib/data.ts';
 import { API_URL } from '@/lib/utils.ts';
+import { Link } from './link/Link.tsx';
 import { List } from './typography/Typography.tsx';
 
 export default function ActiveUrls() {
@@ -23,13 +24,13 @@ export default function ActiveUrls() {
     <List>
       {urls?.data.map((item) => (
         <li key={item.id}>
-          <a
+          <Link
             href={`${API_URL}/url/${item.short_url}`}
             rel="noopener noreferrer"
             target="_blank"
           >
             {`${API_URL}/url/${item.short_url}`}
-          </a>
+          </Link>
         </li>
       ))}
     </List>
