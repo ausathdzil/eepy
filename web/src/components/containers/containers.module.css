@@ -1,0 +1,18 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 8);
+
+  max-width: var(--container-3xl);
+  min-height: 100vh;
+  margin-inline: auto;
+  padding: calc(var(--spacing) * 8);
+
+  container-type: inline-size;
+  container-name: main;
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+}

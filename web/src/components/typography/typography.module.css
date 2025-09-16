@@ -1,0 +1,22 @@
+.h1 {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: calc(var(--tracking-normal) - 0.025em);
+  line-height: var(--text-3xl--line-height);
+  scroll-margin: calc(var(--spacing) * 20);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.h2 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--text-2xl--line-height);
+  letter-spacing: calc(var(--tracking-normal) - 0.025em);
+  padding-bottom: calc(var(--spacing) * 2);
+  scroll-margin: calc(var(--spacing) * 20);
+
+  &:first-child {
+    margin-top: calc(var(--spacing) * 0);
+  }
+}

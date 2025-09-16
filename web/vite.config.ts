@@ -12,6 +12,7 @@ export default defineConfig({
           groups: [
             { name: 'react', test: '/node_modules[\\/]react/' },
             { name: 'react-dom', test: '/node_modules[\\/]react-dom/' },
+            { name: 'react-router', test: '/node_modules[\\/]react-router/' },
             { name: 'swr', test: '/node_modules[\\/]swr/' },
           ],
         },
