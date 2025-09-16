@@ -1,14 +1,17 @@
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { MainContainer, Stack } from '../components/containers/Containers.tsx';
+import { MainContainer, Stack } from '@/components/containers/Containers.tsx';
 import {
+  List,
   TypographyH1,
   TypographyH2,
-} from '../components/typography/Typography.tsx';
-import { shortenUrl } from '../lib/actions.ts';
-import { getActiveUrls } from '../lib/data.ts';
-import { API_URL } from '../lib/utils.ts';
+} from '@/components/typography/Typography.tsx';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { shortenUrl } from '@/lib/actions.ts';
+import { getActiveUrls } from '@/lib/data.ts';
+import { API_URL } from '@/lib/utils.ts';
 
 export default function Home() {
   return (
@@ -35,13 +38,13 @@ function UrlForm() {
   };
 
   return (
-    <Stack align="center" direction="column" gap="calc(var(--spacing) * 4)">
+    <Stack align="start" direction="column" gap="calc(var(--spacing) * 4)">
       <TypographyH2>Shorten URL</TypographyH2>
       <form onSubmit={handleSubmit}>
-        <input type="url" placeholder="Enter URL" name="url" required />
-        <button disabled={isMutating} type="submit">
+        <Input name="url" placeholder="Enter URL" required type="url" />
+        <Button disabled={isMutating} type="submit">
           {isMutating ? 'Shortening...' : 'Shorten'}
-        </button>
+        </Button>
       </form>
       {error && <div>{error.message}</div>}
       {data?.short_url && <div>Successfully shortened URL</div>}
@@ -65,21 +68,21 @@ function ActiveUrls() {
   }
 
   return (
-    <Stack align="center" direction="column" gap="calc(var(--spacing) * 4)">
+    <Stack align="start" direction="column" gap="calc(var(--spacing) * 4)">
       <TypographyH2>Active URLs</TypographyH2>
-      <ul>
+      <List>
         {urls?.data.map((item) => (
           <li key={item.id}>
             <a
               href={`${API_URL}/url/${item.short_url}`}
-              target="_blank"
               rel="noopener noreferrer"
+              target="_blank"
             >
               {`${API_URL}/url/${item.short_url}`}
             </a>
           </li>
         ))}
-      </ul>
+      </List>
     </Stack>
   );
 }

@@ -20,3 +20,20 @@
     margin-top: calc(var(--spacing) * 0);
   }
 }
+
+.p {
+  line-height: calc(var(--spacing) * 7);
+
+  &:not(:first-child) {
+    margin-top: calc(var(--spacing) * 6);
+  }
+}
+
+.list {
+  margin-left: calc(var(--spacing) * 6);
+  list-style-type: disc;
+
+  & > li {
+    margin-top: calc(var(--spacing) * 2);
+  }
+}

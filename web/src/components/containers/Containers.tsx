@@ -1,7 +1,7 @@
 import type { ComponentProps, CSSProperties } from 'react';
 
+import { cn } from '@/lib/utils.ts';
 import styles from './containers.module.css';
-import { cn } from '../../lib/utils.ts';
 
 export function MainContainer({ className, ...props }: ComponentProps<'main'>) {
   return <main className={cn(styles.main, className)} {...props} />;
@@ -22,12 +22,12 @@ export function Stack({
 }: Partial<StackProps>) {
   return (
     <div
+      className={cn(styles.stack, className)}
       style={{
         alignContent: align,
         flexDirection: direction,
-        gap: gap,
+        gap,
       }}
-      className={cn(styles.stack, className)}
       {...props}
     />
   );

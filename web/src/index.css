@@ -1,4 +1,5 @@
-@import 'tailwindcss';
+/* biome-ignore-all lint/suspicious/noUnknownAtRules: Required for Tailwind */
+@import "tailwindcss";
 
 :root {
   --background: oklch(1 0 0);
@@ -33,20 +34,20 @@
   --sidebar-accent-foreground: oklch(0.3289 0.0107 91.6587);
   --sidebar-border: oklch(0.8973 0.0014 106.4264);
   --sidebar-ring: oklch(0.6057 0.1814 255.7713);
-  --font-sans: Inter;
+  --font-sans: Inter, sans-serif;
   --radius: 0.3rem;
   --shadow-2xs: 0px 2px 12px 0px hsl(0 0% 0% / 0.03);
   --shadow-xs: 0px 2px 12px 0px hsl(0 0% 0% / 0.03);
-  --shadow-sm: 0px 2px 12px 0px hsl(0 0% 0% / 0.05),
-    0px 1px 2px -1px hsl(0 0% 0% / 0.05);
-  --shadow: 0px 2px 12px 0px hsl(0 0% 0% / 0.05),
-    0px 1px 2px -1px hsl(0 0% 0% / 0.05);
-  --shadow-md: 0px 2px 12px 0px hsl(0 0% 0% / 0.05),
-    0px 2px 4px -1px hsl(0 0% 0% / 0.05);
-  --shadow-lg: 0px 2px 12px 0px hsl(0 0% 0% / 0.05),
-    0px 4px 6px -1px hsl(0 0% 0% / 0.05);
-  --shadow-xl: 0px 2px 12px 0px hsl(0 0% 0% / 0.05),
-    0px 8px 10px -1px hsl(0 0% 0% / 0.05);
+  --shadow-sm:
+    0px 2px 12px 0px hsl(0 0% 0% / 0.05), 0px 1px 2px -1px hsl(0 0% 0% / 0.05);
+  --shadow:
+    0px 2px 12px 0px hsl(0 0% 0% / 0.05), 0px 1px 2px -1px hsl(0 0% 0% / 0.05);
+  --shadow-md:
+    0px 2px 12px 0px hsl(0 0% 0% / 0.05), 0px 2px 4px -1px hsl(0 0% 0% / 0.05);
+  --shadow-lg:
+    0px 2px 12px 0px hsl(0 0% 0% / 0.05), 0px 4px 6px -1px hsl(0 0% 0% / 0.05);
+  --shadow-xl:
+    0px 2px 12px 0px hsl(0 0% 0% / 0.05), 0px 8px 10px -1px hsl(0 0% 0% / 0.05);
   --shadow-2xl: 0px 2px 12px 0px hsl(0 0% 0% / 0.13);
   --tracking-normal: 0px;
   --spacing: 0.25rem;
@@ -89,16 +90,16 @@
   --radius: 0.3rem;
   --shadow-2xs: 0px 2px 12px 0px hsl(0 0% 0% / 0.1);
   --shadow-xs: 0px 2px 12px 0px hsl(0 0% 0% / 0.1);
-  --shadow-sm: 0px 2px 12px 0px hsl(0 0% 0% / 0.2),
-    0px 1px 2px -1px hsl(0 0% 0% / 0.2);
-  --shadow: 0px 2px 12px 0px hsl(0 0% 0% / 0.2),
-    0px 1px 2px -1px hsl(0 0% 0% / 0.2);
-  --shadow-md: 0px 2px 12px 0px hsl(0 0% 0% / 0.2),
-    0px 2px 4px -1px hsl(0 0% 0% / 0.2);
-  --shadow-lg: 0px 2px 12px 0px hsl(0 0% 0% / 0.2),
-    0px 4px 6px -1px hsl(0 0% 0% / 0.2);
-  --shadow-xl: 0px 2px 12px 0px hsl(0 0% 0% / 0.2),
-    0px 8px 10px -1px hsl(0 0% 0% / 0.2);
+  --shadow-sm:
+    0px 2px 12px 0px hsl(0 0% 0% / 0.2), 0px 1px 2px -1px hsl(0 0% 0% / 0.2);
+  --shadow:
+    0px 2px 12px 0px hsl(0 0% 0% / 0.2), 0px 1px 2px -1px hsl(0 0% 0% / 0.2);
+  --shadow-md:
+    0px 2px 12px 0px hsl(0 0% 0% / 0.2), 0px 2px 4px -1px hsl(0 0% 0% / 0.2);
+  --shadow-lg:
+    0px 2px 12px 0px hsl(0 0% 0% / 0.2), 0px 4px 6px -1px hsl(0 0% 0% / 0.2);
+  --shadow-xl:
+    0px 2px 12px 0px hsl(0 0% 0% / 0.2), 0px 8px 10px -1px hsl(0 0% 0% / 0.2);
   --shadow-2xl: 0px 2px 12px 0px hsl(0 0% 0% / 0.5);
 }
 
@@ -160,6 +161,11 @@
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
 }
 
-body {
-  letter-spacing: var(--tracking-normal);
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
