@@ -1,10 +1,31 @@
+from fastapi import APIRouter, FastAPI
+from starlette.middleware.cors import CORSMiddleware
+
 from api.config import settings
-from fastapi import FastAPI
+from api.db import lifespan
+from api.routes import url, utils
+
+api_router = APIRouter()
+api_router.include_router(utils.router)
+api_router.include_router(url.router)
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    lifespan=lifespan,
 )
+
+if settings.all_cors_origin:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.all_cors_origin,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+app.include_router(router=api_router, prefix=settings.API_V1_STR)
 
 
 @app.get("/")
