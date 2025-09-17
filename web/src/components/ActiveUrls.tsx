@@ -37,15 +37,17 @@ export default function ActiveUrls({
   }
 
   return (
-    <Stack align="center" className="w-full" gap="4">
+    <Stack align="center" className="w-full flex-col" gap="8">
       {urls.data.map((url) => (
         <Card className="w-full max-w-md" key={url.id}>
           <CardHeader>
-            <CardTitle>
-              {BASE_URL}/{url.short_url}
-            </CardTitle>
-            <CardDescription>{url.long_url}</CardDescription>
-            <CardAction>
+            <Stack direction="column" gap="1">
+              <CardTitle>
+                {BASE_URL}/{url.short_url}
+              </CardTitle>
+              <CardDescription>{url.long_url}</CardDescription>
+            </Stack>
+            <CardAction className="hidden sm:block">
               <Link
                 className={buttonVariants({ variant: 'secondary' })}
                 href={`/${url.short_url}`}
@@ -55,9 +57,9 @@ export default function ActiveUrls({
             </CardAction>
           </CardHeader>
           <CardFooter>
-            <Stack className="text-muted-foreground text-sm" gap="2">
+            <Stack className="text-muted-foreground text-xs sm:text-sm" gap="2">
               <Stack align="center" direction="row" gap="2">
-                <ClockPlusIcon className="size-4" />
+                <ClockPlusIcon className="size-3 sm:size-4" />
                 <p>
                   Created:{' '}
                   <span className="font-medium text-primary">
@@ -66,7 +68,7 @@ export default function ActiveUrls({
                 </p>
               </Stack>
               <Stack align="center" direction="row" gap="2">
-                <ClockAlertIcon className="size-4" />
+                <ClockAlertIcon className="size-3 sm:size-4" />
                 <p>
                   Expires:{' '}
                   <span className="font-medium text-destructive">

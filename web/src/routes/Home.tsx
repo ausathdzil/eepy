@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <MainContainer>
       <TypographyH1>😼 eepy 😼</TypographyH1>
-      <Stack direction="row" justify="center">
+      <Stack className="md:!flex-row" gap="8" justify="center">
         <Stack
           align="center"
           className="w-full flex-1"
