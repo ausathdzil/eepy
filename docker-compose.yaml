@@ -1,0 +1,29 @@
+services:
+  api:
+    # Build the image from the Dockerfile in the api directory
+    build: ./api
+
+    # Host the FastAPI application on port 8000
+    ports:
+      - '8000:8000'
+
+    # Load environment variables from the project root .env
+    env_file:
+      - .env
+
+    develop:
+      # Create a `watch` configuration to update the app
+      # https://docs.docker.com/compose/file-watch/#compose-watch-versus-bind-mounts
+      watch:
+        # Sync the working directory with the `/app` directory in the container
+        - action: sync
+          path: ./api
+          target: /app
+          # Exclude the project virtual environment — it could be for a
+          # different platform in the container
+          ignore:
+            - .venv/
+
+        # Rebuild the image if dependencies change by checking uv.lock
+        - action: rebuild
+          path: ./api/uv.lock

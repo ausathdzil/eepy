@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import RedirectResponse
 from sqlmodel import func, select
 
-from api.db import SessionDep
-from api.models import Url, UrlCreate, UrlsPublic
+from app.db import SessionDep
+from app.models import Url, UrlCreate, UrlsPublic
 
 router = APIRouter(prefix="/url", tags=["url"])
 

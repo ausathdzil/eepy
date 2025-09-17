@@ -1,9 +1,9 @@
 from fastapi import APIRouter, FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from api.config import settings
-from api.db import lifespan
-from api.routes import url, utils
+from app.config import settings
+from app.db import lifespan
+from app.routes import url, utils
 
 api_router = APIRouter()
 api_router.include_router(utils.router)
