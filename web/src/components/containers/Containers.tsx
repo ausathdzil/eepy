@@ -11,12 +11,14 @@ type StackProps = ComponentProps<'div'> & {
   align?: CSSProperties['alignItems'];
   direction?: CSSProperties['flexDirection'];
   gap?: CSSProperties['gap'];
+  justify?: CSSProperties['justifyContent'];
 };
 
 export function Stack({
   align = 'start',
   direction = 'column',
   gap,
+  justify = 'start',
   className,
   style,
   ...props
@@ -28,6 +30,7 @@ export function Stack({
         alignItems: align,
         flexDirection: direction,
         gap,
+        justifyContent: justify,
         ...style,
       }}
       {...props}

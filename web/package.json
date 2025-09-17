@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "check": "npx ultracite@latest check",
-    "fix": "npx ultracite@latest fix",
+    "check": "pnpm dlx ultracite check",
+    "fix": "pnpm dlx ultracite fix",
     "preview": "vite preview"
   },
   "dependencies": {

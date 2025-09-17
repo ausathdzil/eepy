@@ -1,7 +1,13 @@
 import type { GetUrl } from '../types/url.ts';
 
 export async function getActiveUrls(url: RequestInfo | URL): Promise<GetUrl> {
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+    },
+  });
+
   if (!res.ok) {
     throw new Error('Failed to fetch active URLs');
   }

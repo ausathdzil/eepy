@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from sqlmodel import func, select
 
 from api.db import SessionDep
-from api.models import Url, UrlCreate, UrlPublic, UrlsPublic
+from api.models import Url, UrlCreate, UrlsPublic
 
 router = APIRouter(prefix="/url", tags=["url"])
 
@@ -44,18 +44,10 @@ def read_urls(session: SessionDep) -> UrlsPublic:
 @router.get("/{short_url}")
 def redirect_url(short_url: str, session: SessionDep):
     statement = select(Url).where(Url.short_url == short_url)
-    url = session.exec(statement).one()
+    url = session.exec(statement).first()
     if not url:
         raise HTTPException(status_code=404, detail="URL not found")
     return RedirectResponse(status_code=302, url=url.long_url)
-
-
-@router.get("/{url_id}")
-def read_url(url_id: int, session: SessionDep) -> UrlPublic:
-    url = session.get(Url, url_id)
-    if not url:
-        raise HTTPException(status_code=404, detail="URL not found")
-    return url
 
 
 @router.delete("/{url_id}")

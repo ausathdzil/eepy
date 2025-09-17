@@ -1,35 +1,36 @@
-import useSWR from 'swr';
+import { BASE_URL } from '@/lib/utils';
+import type { GetUrl } from '@/types/url';
+import { Link } from './link/Link';
+import { Skeleton } from './skeleton/Skeleton';
+import { List } from './typography/Typography';
 
-import { getActiveUrls } from '@/lib/data.ts';
-import { API_URL } from '@/lib/utils.ts';
-import { Link } from './link/Link.tsx';
-import { List } from './typography/Typography.tsx';
-
-export default function ActiveUrls() {
-  const {
-    data: urls,
-    error,
-    isLoading,
-  } = useSWR(`${API_URL}/url`, getActiveUrls);
-
+export default function ActiveUrls({
+  urls,
+  error,
+  isLoading,
+}: {
+  urls: GetUrl | undefined;
+  error: Error | null;
+  isLoading: boolean;
+}) {
   if (error) {
     return <div>{error.message}</div>;
   }
 
   if (isLoading) {
-    return <div>loading...</div>;
+    return <Skeleton className="h-40 w-full max-w-md" />;
+  }
+
+  if (!urls) {
+    return <div>No URLs found</div>;
   }
 
   return (
     <List>
-      {urls?.data.map((item) => (
+      {urls.data.map((item) => (
         <li key={item.id}>
-          <Link
-            href={`${API_URL}/url/${item.short_url}`}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            {`${API_URL}/url/${item.short_url}`}
+          <Link href={`/${item.short_url}`}>
+            {`${BASE_URL}/${item.short_url}`}
           </Link>
         </li>
       ))}
