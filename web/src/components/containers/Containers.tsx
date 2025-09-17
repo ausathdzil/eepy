@@ -29,7 +29,7 @@ export function Stack({
       style={{
         alignItems: align,
         flexDirection: direction,
-        gap,
+        gap: `calc(var(--spacing) * ${gap})`,
         justifyContent: justify,
         ...style,
       }}

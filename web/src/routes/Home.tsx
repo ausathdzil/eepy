@@ -23,17 +23,19 @@ export default function Home() {
   return (
     <MainContainer>
       <TypographyH1>😼 eepy 😼</TypographyH1>
-      <Stack align="center" direction="column" gap="calc(var(--spacing) * 4)">
-        <TypographyH2>Shorten URL</TypographyH2>
-        <Suspense fallback={<Skeleton className="h-40 w-full max-w-md" />}>
-          <UrlForm />
-        </Suspense>
-      </Stack>
-      <Stack align="center" direction="column" gap="calc(var(--spacing) * 4)">
-        <TypographyH2>Active URLs</TypographyH2>
-        <Suspense fallback={<Skeleton className="h-40 w-full max-w-md" />}>
-          <ActiveUrls error={error} isLoading={isLoading} urls={urls} />
-        </Suspense>
+      <Stack direction="row" gap="4" justify="center">
+        <Stack align="center" className="flex-1" direction="column" gap="4">
+          <TypographyH2>Shorten URL</TypographyH2>
+          <Suspense fallback={<Skeleton className="h-40 w-full max-w-md" />}>
+            <UrlForm />
+          </Suspense>
+        </Stack>
+        <Stack align="center" className="flex-1" direction="column" gap="4">
+          <TypographyH2>Active URLs</TypographyH2>
+          <Suspense fallback={<Skeleton className="h-40 w-full max-w-md" />}>
+            <ActiveUrls error={error} isLoading={isLoading} urls={urls} />
+          </Suspense>
+        </Stack>
       </Stack>
     </MainContainer>
   );

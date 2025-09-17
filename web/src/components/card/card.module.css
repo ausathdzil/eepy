@@ -25,10 +25,6 @@
   &:has(*[data-slot="card-action"]) {
     grid-template-columns: 1fr auto;
   }
-
-  &:is(.border-b) {
-    padding-bottom: calc(var(--spacing) * 6);
-  }
 }
 
 .cardTitle {
@@ -58,8 +54,4 @@
   display: flex;
   align-items: center;
   padding-inline: calc(var(--spacing) * 6);
-
-  &:is(.border-t) {
-    padding-top: calc(var(--spacing) * 6);
-  }
 }

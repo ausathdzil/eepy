@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: calc(var(--spacing) * 8);
 
-  max-width: var(--container-3xl);
+  max-width: var(--container-4xl);
   min-height: 100vh;
   margin-inline: auto;
   padding: calc(var(--spacing) * 8);
