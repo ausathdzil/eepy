@@ -20,11 +20,18 @@ def base62_encode(num: int) -> str:
 @router.post("/shorten")
 def shorten_url(url_in: UrlCreate, session: SessionDep):
     url = Url(long_url=url_in.long_url)
+    if url_in.short_url:
+        statement = select(Url).where(Url.short_url == url_in.short_url)
+        existing_url = session.exec(statement).first()
+        if existing_url:
+            raise HTTPException(status_code=400, detail="Short URL already exists")
+        url.short_url = url_in.short_url
     session.add(url)
     session.commit()
     session.refresh(url)
 
-    url.short_url = base62_encode(url.id)
+    if not url.short_url:
+        url.short_url = base62_encode(url.id)
     session.add(url)
     session.commit()
     session.refresh(url)

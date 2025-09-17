@@ -13,7 +13,7 @@ import { Label } from './ui/label.tsx';
 export default function UrlForm() {
   const {
     data: _data,
-    error: _error,
+    error,
     trigger,
     isMutating,
   } = useSWRMutation(`${API_URL}/url/shorten`, shortenUrl);
@@ -21,24 +21,31 @@ export default function UrlForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const url = formData.get('url') as string;
-    await trigger({ long_url: url });
+    const long_url = formData.get('long_url') as string;
+    const short_url = formData.get('short_url') as string;
+    await trigger({ long_url, short_url });
     mutate(`${API_URL}/url`);
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full">
       <form className="space-y-4" onSubmit={handleSubmit}>
-        <CardContent className="space-y-2">
-          <Label>Enter your URL</Label>
-          <Input
-            name="url"
-            placeholder="https://example.com"
-            required
-            type="url"
-          />
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label>Enter your URL</Label>
+            <Input
+              name="long_url"
+              placeholder="https://example.com"
+              required
+              type="url"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Enter custom short URL (optional)</Label>
+            <Input name="short_url" placeholder="blog" type="text" />
+          </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="!items-start flex-col gap-2">
           <Button className="w-full" disabled={isMutating} type="submit">
             {isMutating ? (
               <LoaderIcon className="animate-spin" />
@@ -46,6 +53,7 @@ export default function UrlForm() {
               'Shorten URL'
             )}
           </Button>
+          {error && <p className="text-destructive text-sm">{error.message}</p>}
         </CardFooter>
       </form>
     </Card>

@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: calc(var(--spacing) * 8);
 
-  max-width: var(--container-4xl);
+  max-width: var(--container-5xl);
   min-height: 100vh;
   margin-inline: auto;
   padding: calc(var(--spacing) * 8);
@@ -15,4 +15,8 @@
 .stack {
   display: flex;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column !important;
+  }
 }

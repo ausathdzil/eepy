@@ -4,6 +4,7 @@ from sqlmodel import Field, SQLModel
 
 class UrlBase(SQLModel):
     long_url: str = Field(index=True)
+    short_url: str | None = Field(default=None, index=True)
 
 
 class UrlCreate(UrlBase):
@@ -12,7 +13,6 @@ class UrlCreate(UrlBase):
 
 class Url(UrlBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    short_url: str | None = Field(default=None, index=True)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     expires_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc) + timedelta(days=30)

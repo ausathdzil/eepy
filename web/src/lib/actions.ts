@@ -2,8 +2,8 @@ import type { Url } from '../types/url';
 
 export async function shortenUrl(
   url: RequestInfo | URL,
-  { arg }: { arg: { long_url: string } }
-): Promise<Url> {
+  { arg }: { arg: { short_url: string; long_url: string } }
+): Promise<Url | { detail: string }> {
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -13,10 +13,11 @@ export async function shortenUrl(
     body: JSON.stringify(arg),
   });
 
+  const data = await res.json();
+
   if (!res.ok) {
-    throw new Error('Failed to shorten URL');
+    throw new Error(data.detail || 'Failed to shorten URL');
   }
 
-  const data = await res.json();
   return data;
 }
