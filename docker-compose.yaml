@@ -1,7 +1,22 @@
 services:
   api:
+    image: '${DOCKER_IMAGE_API?Variable not set}:${TAG-latest}'
+    restart: always
+    networks:
+      - default
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen(\"http://localhost:8000/api/v1/utils/health-check/\").getcode()==200 else 1)"',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
     # Build the image from the Dockerfile in the api directory
-    build: ./api
+    build:
+      context: ./api
 
     # Host the FastAPI application on port 8000
     ports:
@@ -27,3 +42,20 @@ services:
         # Rebuild the image if dependencies change by checking uv.lock
         - action: rebuild
           path: ./api/uv.lock
+
+  web:
+    image: '${DOCKER_IMAGE_WEB?Variable not set}:${TAG-latest}'
+    restart: always
+    networks:
+      - default
+    ports:
+      - '5173:80'
+    build:
+      context: ./web
+      args:
+        - VITE_API_URL=http://localhost:8000/api/v1
+        - VITE_BASE_URL=http://localhost:5173
+        - NODE_ENV=production
+    depends_on:
+      api:
+        condition: service_healthy
