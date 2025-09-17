@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
 import { NavLink } from 'react-router';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils.ts';
 import styles from './link.module.css';
 
 export function Link({

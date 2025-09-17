@@ -1,4 +1,4 @@
-import type { Url } from '../types/url';
+import type { Url } from '../types/url.ts';
 
 export async function shortenUrl(
   url: RequestInfo | URL,

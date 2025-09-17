@@ -1,6 +1,6 @@
 import { useParams } from 'react-router';
 
-import { Stack } from '@/components/containers/Containers';
+import { Stack } from '@/components/containers/Containers.tsx';
 import { API_URL } from '@/lib/utils.ts';
 
 export default function Url() {

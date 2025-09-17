@@ -1,6 +1,7 @@
 import { ClockAlertIcon, ClockPlusIcon } from 'lucide-react';
-import { BASE_URL, formatDate } from '@/lib/utils';
-import type { GetUrl } from '@/types/url';
+
+import { BASE_URL, formatDate } from '@/lib/utils.ts';
+import type { GetUrl } from '@/types/url.ts';
 import {
   Card,
   CardAction,
@@ -8,11 +9,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from './card/Card';
-import { Stack } from './containers/Containers';
-import { Link } from './link/Link';
-import { Skeleton } from './skeleton/Skeleton';
-import { buttonVariants } from './ui/button';
+} from './card/Card.tsx';
+import { Stack } from './containers/Containers.tsx';
+import { Link } from './link/Link.tsx';
+import { Skeleton } from './skeleton/Skeleton.tsx';
+import { buttonVariants } from './ui/button.tsx';
 
 export default function ActiveUrls({
   urls,
