@@ -1,8 +1,7 @@
 from contextlib import asynccontextmanager
-from typing import Annotated
 
-from fastapi import Depends, FastAPI
-from sqlmodel import Session, SQLModel, create_engine
+from fastapi import FastAPI
+from sqlmodel import SQLModel, create_engine
 
 sqlite_file_name = "eepy.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
@@ -17,11 +16,3 @@ async def lifespan(app: FastAPI):
     yield
     SQLModel.metadata.drop_all(engine)
     engine.dispose()
-
-
-def get_session():
-    with Session(engine) as session:
-        yield session
-
-
-SessionDep = Annotated[Session, Depends(get_session)]

@@ -53,8 +53,8 @@ services:
     build:
       context: ./web
       args:
-        - VITE_API_URL=http://localhost:8000/api/v1
-        - VITE_BASE_URL=http://localhost:5173
+        - VITE_API_URL=${DOMAIN?Variable not set}/api/v1
+        - VITE_BASE_URL=${FRONTEND_HOST?Variable not set}
         - NODE_ENV=production
     depends_on:
       api:

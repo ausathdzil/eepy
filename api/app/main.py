@@ -3,11 +3,13 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.db import lifespan
-from app.routes import url, utils
+from app.routes import auth, url, users, utils
 
 api_router = APIRouter()
 api_router.include_router(utils.router)
 api_router.include_router(url.router)
+api_router.include_router(auth.router)
+api_router.include_router(users.router)
 
 
 app = FastAPI(

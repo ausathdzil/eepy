@@ -1,5 +1,41 @@
 from datetime import datetime, timedelta, timezone
-from sqlmodel import Field, SQLModel
+
+from pydantic import EmailStr
+from sqlmodel import Field, Relationship, SQLModel
+
+
+class UserBase(SQLModel):
+    full_name: str = Field(max_length=255)
+    email: EmailStr = Field(unique=True, index=True, max_length=255)
+
+
+class UserCreate(UserBase):
+    password: str = Field(min_length=8, max_length=255)
+
+
+class UserUpdate(UserBase):
+    full_name: str | None = Field(default=None, max_length=255)
+    email: EmailStr | None = Field(default=None, max_length=255)
+
+
+class UpdatePassword(SQLModel):
+    current_password: str = Field(min_length=8, max_length=255)
+    new_password: str = Field(min_length=8, max_length=255)
+
+
+class User(UserBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    hashed_password: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    url: list["Url"] = Relationship(back_populates="user", cascade_delete=True)
+
+
+class UserPublic(UserBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
 
 
 class UrlBase(SQLModel):
@@ -18,6 +54,9 @@ class Url(UrlBase, table=True):
         default_factory=lambda: datetime.now(timezone.utc) + timedelta(days=30)
     )
 
+    user_id: int | None = Field(default=None, foreign_key="user.id")
+    user: User | None = Relationship(back_populates="url")
+
 
 class UrlPublic(UrlBase):
     id: int
@@ -29,3 +68,8 @@ class UrlPublic(UrlBase):
 class UrlsPublic(SQLModel):
     data: list[UrlPublic]
     count: int
+
+
+class Token(SQLModel):
+    access_token: str
+    token_type: str

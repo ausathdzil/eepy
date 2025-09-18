@@ -44,7 +44,7 @@ export default function UrlForm() {
           <div className="space-y-2">
             <Label htmlFor="short_url">Enter custom short URL (optional)</Label>
             <div className="flex rounded-md shadow-xs">
-              <span className="border-input bg-background text-muted-foreground inline-flex items-center rounded-s-md border px-3 text-sm">
+              <span className="inline-flex items-center rounded-s-md border border-input bg-background px-3 text-muted-foreground text-sm">
                 {BASE_URL}/u/
               </span>
               <Input

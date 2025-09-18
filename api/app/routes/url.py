@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import RedirectResponse
 from sqlmodel import func, select
 
-from app.db import SessionDep
+from app.deps import CurrentUser, SessionDep
 from app.models import Url, UrlCreate, UrlsPublic
 
 router = APIRouter(prefix="/url", tags=["url"])
@@ -18,8 +18,8 @@ def base62_encode(num: int) -> str:
 
 
 @router.post("/shorten")
-def shorten_url(url_in: UrlCreate, session: SessionDep):
-    url = Url(long_url=url_in.long_url)
+def shorten_url(url_in: UrlCreate, session: SessionDep, current_user: CurrentUser):
+    url = Url(long_url=url_in.long_url, user_id=current_user.id)
     if url_in.short_url:
         statement = select(Url).where(Url.short_url == url_in.short_url)
         existing_url = session.exec(statement).first()
