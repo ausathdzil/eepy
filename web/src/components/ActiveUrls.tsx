@@ -43,14 +43,14 @@ export default function ActiveUrls({
           <CardHeader>
             <Stack direction="column" gap="1">
               <CardTitle>
-                {BASE_URL}/{url.short_url}
+                {BASE_URL}/u/{url.short_url}
               </CardTitle>
               <CardDescription>{url.long_url}</CardDescription>
             </Stack>
             <CardAction className="hidden sm:block">
               <Link
                 className={buttonVariants({ variant: 'secondary' })}
-                href={`/${url.short_url}`}
+                href={`/u/${url.short_url}`}
               >
                 Visit
               </Link>

@@ -4,7 +4,7 @@ import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { shortenUrl } from '@/lib/actions.ts';
-import { API_URL } from '@/lib/utils.ts';
+import { API_URL, BASE_URL } from '@/lib/utils.ts';
 import { Card, CardContent, CardFooter } from './card/Card.tsx';
 import { Button } from './ui/button.tsx';
 import { Input } from './ui/input.tsx';
@@ -32,8 +32,9 @@ export default function UrlForm() {
       <form className="space-y-4" onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Enter your URL</Label>
+            <Label htmlFor="long_url">Enter your URL</Label>
             <Input
+              id="long_url"
               name="long_url"
               placeholder="https://example.com"
               required
@@ -41,8 +42,19 @@ export default function UrlForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label>Enter custom short URL (optional)</Label>
-            <Input name="short_url" placeholder="blog" type="text" />
+            <Label htmlFor="short_url">Enter custom short URL (optional)</Label>
+            <div className="flex rounded-md shadow-xs">
+              <span className="border-input bg-background text-muted-foreground inline-flex items-center rounded-s-md border px-3 text-sm">
+                {BASE_URL}/u/
+              </span>
+              <Input
+                className="-ms-px rounded-s-none shadow-none"
+                id="short_url"
+                name="short_url"
+                placeholder="blog"
+                type="text"
+              />
+            </div>
           </div>
         </CardContent>
         <CardFooter className="!items-start flex-col gap-2">

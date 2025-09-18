@@ -9,7 +9,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<HomePage />} index />
-        <Route element={<UrlPage />} path="/:short_url" />
+        <Route element={<UrlPage />} path="/u/:short_url" />
       </Routes>
     </BrowserRouter>
   );
