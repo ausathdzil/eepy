@@ -6,6 +6,9 @@
   },
   "linter": {
     "rules": {
+      "correctness": {
+        "useImportExtensions": "error"
+      },
       "style": {
         "useFilenamingConvention": {
           "level": "error",

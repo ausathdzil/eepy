@@ -8,17 +8,24 @@ import { TypographyH1 } from '@/components/typography/Typography.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
+import { useUser } from '@/hooks/useUser.ts';
 import { register } from '@/lib/actions/auth.ts';
 import { API_URL } from '@/lib/utils.ts';
 
 export default function Register() {
+  const navigate = useNavigate();
+
+  const { user } = useUser();
+  if (user) {
+    navigate('/');
+  }
+
   const { error, trigger, isMutating } = useSWRMutation(
     `${API_URL}/auth/register`,
     register
   );
 
   const { mutate } = useSWRConfig();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -17,7 +17,7 @@ export async function getUser(url: RequestInfo | URL): Promise<User | null> {
     if (res.status === HTTP_UNAUTHORIZED) {
       return null;
     }
-    throw new Error(data.detail || 'Failed to fetch user');
+    throw new Error(data.detail[0].msg || data.detail || 'Failed to fetch user');
   }
 
   return data;

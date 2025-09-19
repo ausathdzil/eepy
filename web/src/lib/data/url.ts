@@ -8,10 +8,13 @@ export async function getActiveUrls(url: RequestInfo | URL): Promise<Urls> {
     },
   });
 
+  const data = await res.json();
+
   if (!res.ok) {
-    throw new Error('Failed to fetch active URLs');
+    throw new Error(
+      data.detail[0].msg || data.detail || 'Failed to fetch active URLs'
+    );
   }
 
-  const data = await res.json();
   return data;
 }
