@@ -1,14 +1,13 @@
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
-from sqlmodel import Session, select
-
 from app.config import settings
 from app.deps import SessionDep
 from app.models import Token, User, UserCreate
 from app.security import create_access_token, get_password_hash, verify_password
+from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlmodel import Session, select
 
 
 def get_user_by_email(session: Session, email: str):
@@ -31,7 +30,9 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/login")
 def login_user(
-    session: SessionDep, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+    session: SessionDep,
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    response: Response,
 ):
     user = authenticate_user(session, form_data.username, form_data.password)
     if not user:
@@ -43,6 +44,16 @@ def login_user(
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRES_MINUTES)
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
+    )
+
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        secure=settings.ENVIRONMENT != "local",
+        expires=access_token_expires.total_seconds(),
+        samesite="lax",
+        path="/",
     )
     return Token(access_token=access_token, token_type="bearer")
 

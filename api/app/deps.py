@@ -1,7 +1,7 @@
 from typing import Annotated
 
 import jwt
-from fastapi import Depends, HTTPException, status
+from fastapi import Cookie, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
 from sqlmodel import Session, select
@@ -22,7 +22,9 @@ SessionDep = Annotated[Session, Depends(get_session)]
 TokenDep = Annotated[str, Depends(oauth2_scheme)]
 
 
-def get_current_user(session: SessionDep, token: TokenDep):
+def get_current_user(
+    session: SessionDep, access_token: Annotated[str | None, Cookie()] = None
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -30,7 +32,7 @@ def get_current_user(session: SessionDep, token: TokenDep):
     )
     try:
         payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+            access_token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
         username = payload.get("sub")
     except InvalidTokenError:

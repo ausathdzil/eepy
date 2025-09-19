@@ -3,10 +3,7 @@ import useSWR from 'swr';
 
 import { MainContainer, Stack } from '@/components/containers/Containers.tsx';
 import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
-import {
-  TypographyH1,
-  TypographyH2,
-} from '@/components/typography/Typography.tsx';
+import { TypographyH2 } from '@/components/typography/Typography.tsx';
 import { getActiveUrls } from '@/lib/data.ts';
 import { API_URL } from '@/lib/utils.ts';
 
@@ -22,7 +19,6 @@ export default function Home() {
 
   return (
     <MainContainer>
-      <TypographyH1>😼 eepy 😼</TypographyH1>
       <Stack className="md:!flex-row" gap="8" justify="center">
         <Stack
           align="center"

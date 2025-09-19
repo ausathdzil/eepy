@@ -1,7 +1,7 @@
 import { ClockAlertIcon, ClockPlusIcon } from 'lucide-react';
 
 import { BASE_URL, formatDate } from '@/lib/utils.ts';
-import type { GetUrl } from '@/types/url.ts';
+import type { Urls } from '@/types/url.ts';
 import {
   Card,
   CardAction,
@@ -20,7 +20,7 @@ export default function ActiveUrls({
   error,
   isLoading,
 }: {
-  urls: GetUrl | undefined;
+  urls: Urls | undefined;
   error: Error | null;
   isLoading: boolean;
 }) {

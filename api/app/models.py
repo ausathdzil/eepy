@@ -64,6 +64,8 @@ class UrlPublic(UrlBase):
     created_at: datetime
     expires_at: datetime
 
+    user: UserPublic
+
 
 class UrlsPublic(SQLModel):
     data: list[UrlPublic]

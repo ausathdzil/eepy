@@ -1,4 +1,4 @@
-import type { Url } from '../types/url.ts';
+import type { Url } from '@/types/url.ts';
 
 export async function shortenUrl(
   url: RequestInfo | URL,
@@ -11,6 +11,7 @@ export async function shortenUrl(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(arg),
+    credentials: 'include',
   });
 
   const data = await res.json();

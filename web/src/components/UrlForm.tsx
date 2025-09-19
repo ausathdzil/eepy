@@ -3,7 +3,7 @@ import { LoaderIcon } from 'lucide-react';
 import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { shortenUrl } from '@/lib/actions.ts';
+import { shortenUrl } from '@/lib/actions/url.ts';
 import { API_URL, BASE_URL } from '@/lib/utils.ts';
 import { Card, CardContent, CardFooter } from './card/Card.tsx';
 import { Button } from './ui/button.tsx';
