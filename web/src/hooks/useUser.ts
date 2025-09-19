@@ -8,7 +8,9 @@ type UserContextType = {
   isLoading: boolean;
 };
 
-export const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(
+  undefined
+);
 
 export function useUser() {
   const context = useContext(UserContext);
