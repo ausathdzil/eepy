@@ -1,9 +1,10 @@
 import { Link, Outlet } from 'react-router';
 
+import { useUser } from '@/hooks/useUser.ts';
 import { Stack } from '../containers/Containers.tsx';
-import { useUser } from '../UserProvider.tsx';
 import { buttonVariants } from '../ui/button.tsx';
 import { Header } from './Header.tsx';
+import { Skeleton } from '../skeleton/Skeleton.tsx';
 
 export function AppLayout() {
   return (
@@ -23,15 +24,15 @@ function UserButton() {
   const { user, error, isLoading } = useUser();
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <p className="text-sm text-destructive">Error: {error.message}</p>;
   }
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Skeleton className="h-8 w-39" />;
   }
 
   if (user) {
-    return <div className="font-medium">👋 Hey, {user.full_name}!</div>;
+    return <p className="font-medium">👋 Hey, {user.full_name}!</p>;
   }
 
   return (
