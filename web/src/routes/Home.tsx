@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { MainContainer, Stack } from '@/components/containers/Containers.tsx';
 import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
 import { TypographyH2 } from '@/components/typography/Typography.tsx';
-import { getActiveUrls } from '@/lib/data.ts';
+import { getActiveUrls } from '@/lib/data/url';
 import { API_URL } from '@/lib/utils.ts';
 
 const UrlForm = lazy(() => import('@/components/UrlForm.tsx'));

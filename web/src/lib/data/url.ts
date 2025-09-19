@@ -1,4 +1,4 @@
-import type { Urls } from '../types/url.ts';
+import type { Urls } from '@/types/url.ts';
 
 export async function getActiveUrls(url: RequestInfo | URL): Promise<Urls> {
   const res = await fetch(url, {
