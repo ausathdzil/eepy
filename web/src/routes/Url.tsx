@@ -1,3 +1,5 @@
+import { LoaderIcon } from 'lucide-react';
+
 import { useParams } from 'react-router';
 
 import { Stack } from '@/components/containers/Containers.tsx';
@@ -9,8 +11,15 @@ export default function Url() {
   window.location.href = `${API_URL}/url/${short_url}`;
 
   return (
-    <Stack align="center" className="min-h-screen" justify="center">
-      Redirecting...
+    <Stack
+      direction="column"
+      align="center"
+      className="min-h-screen"
+      justify="center"
+      gap="2"
+    >
+      <LoaderIcon className="animate-spin" />
+      <p>Redirecting</p>
     </Stack>
   );
 }

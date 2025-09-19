@@ -17,8 +17,9 @@ export default function App() {
           <Routes>
             <Route element={<AppLayout />}>
               <Route element={<HomePage />} index />
-              <Route element={<UrlPage />} path="u/:short_url" />
             </Route>
+
+            <Route element={<UrlPage />} path="u/:short_url" />
 
             <Route path="auth">
               <Route element={<LoginPage />} path="login" />

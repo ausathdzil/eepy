@@ -1,5 +1,3 @@
-import { LoaderIcon } from 'lucide-react';
-
 import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
@@ -61,11 +59,7 @@ export default function UrlForm() {
         </CardContent>
         <CardFooter className="!items-start flex-col gap-2">
           <Button className="w-full" disabled={isMutating} type="submit">
-            {isMutating ? (
-              <LoaderIcon className="animate-spin" />
-            ) : (
-              'Shorten URL'
-            )}
+            Shorten URL
           </Button>
           {error && <p className="text-destructive text-sm">{error.message}</p>}
         </CardFooter>
