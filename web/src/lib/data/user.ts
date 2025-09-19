@@ -1,4 +1,4 @@
-import type { User } from '@/types/user';
+import type { User } from '@/types/user.ts';
 
 const HTTP_UNAUTHORIZED = 401;
 
@@ -17,7 +17,9 @@ export async function getUser(url: RequestInfo | URL): Promise<User | null> {
     if (res.status === HTTP_UNAUTHORIZED) {
       return null;
     }
-    throw new Error(data.detail[0].msg || data.detail || 'Failed to fetch user');
+    throw new Error(
+      data.detail[0].msg || data.detail || 'Failed to fetch user'
+    );
   }
 
   return data;

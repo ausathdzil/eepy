@@ -23,8 +23,10 @@ export default function UrlForm() {
     const formData = new FormData(e.target as HTMLFormElement);
     const long_url = formData.get('long_url') as string;
     const short_url = formData.get('short_url') as string;
-    await trigger({ long_url, short_url });
-    mutate(`${API_URL}/url`);
+    await trigger(
+      { long_url, short_url },
+      { onSuccess: () => mutate(`${API_URL}/url`) }
+    );
   };
 
   return (
