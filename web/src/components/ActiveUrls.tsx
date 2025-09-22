@@ -29,7 +29,12 @@ export default function ActiveUrls({
   }
 
   if (isLoading) {
-    return <Skeleton className="h-40 w-full max-w-md" />;
+    return (
+      <Stack align="center" className="w-full" gap="8">
+        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full max-w-md" />
+      </Stack>
+    );
   }
 
   if (!urls) {
@@ -37,7 +42,7 @@ export default function ActiveUrls({
   }
 
   return (
-    <Stack align="center" className="w-full flex-col" gap="8">
+    <Stack align="center" className="w-full" gap="8">
       {urls.data.map((url) => (
         <Card className="w-full max-w-md" key={url.id}>
           <CardHeader>
@@ -51,6 +56,7 @@ export default function ActiveUrls({
               <Link
                 className={buttonVariants({ variant: 'secondary' })}
                 href={`/u/${url.short_url}`}
+                target="_blank"
               >
                 Visit
               </Link>

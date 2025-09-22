@@ -12,11 +12,11 @@ export default function Url() {
 
   return (
     <Stack
-      direction="column"
       align="center"
       className="min-h-screen"
-      justify="center"
+      direction="column"
       gap="2"
+      justify="center"
     >
       <LoaderIcon className="animate-spin" />
       <p>Redirecting</p>

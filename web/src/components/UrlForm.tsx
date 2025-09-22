@@ -14,7 +14,7 @@ export default function UrlForm() {
     error,
     trigger,
     isMutating,
-  } = useSWRMutation(`${API_URL}/url/shorten`, shortenUrl);
+  } = useSWRMutation(`${API_URL}/url`, shortenUrl);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ export default function UrlForm() {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full max-w-md">
       <form className="space-y-4" onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
