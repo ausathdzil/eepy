@@ -39,10 +39,13 @@ export default function Profile() {
 
 function UrlSkeleton() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {Array.from({ length: 9 }).map((_, index) => (
-        <Skeleton className="h-42 w-full max-w-md" key={index} />
-      ))}
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <Skeleton className="h-42 w-full max-w-md" />
+      <Skeleton className="h-42 w-full max-w-md" />
+      <Skeleton className="h-42 w-full max-w-md" />
+      <Skeleton className="h-42 w-full max-w-md" />
+      <Skeleton className="h-42 w-full max-w-md" />
+      <Skeleton className="h-42 w-full max-w-md" />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import type { Urls } from '@/types/url';
-import { UrlCard } from './UrlCard';
-import { Skeleton } from '../skeleton/Skeleton';
+import { Skeleton } from '../skeleton/Skeleton.tsx';
+import { UrlCard } from './UrlCard.tsx';
 
 export default function UserUrls({
   urls,
@@ -17,10 +17,13 @@ export default function UserUrls({
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <Skeleton className="h-42 w-full max-w-md" key={index} />
-        ))}
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full max-w-md" />
       </div>
     );
   }
