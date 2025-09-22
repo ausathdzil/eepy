@@ -34,7 +34,6 @@
   --sidebar-accent-foreground: oklch(0.3289 0.0107 91.6587);
   --sidebar-border: oklch(0.8973 0.0014 106.4264);
   --sidebar-ring: oklch(0.6057 0.1814 255.7713);
-  --font-sans: Inter, sans-serif;
   --radius: 0.3rem;
   --shadow-2xs: 0px 2px 12px 0px hsl(0 0% 0% / 0.03);
   --shadow-xs: 0px 2px 12px 0px hsl(0 0% 0% / 0.03);
@@ -51,6 +50,17 @@
   --shadow-2xl: 0px 2px 12px 0px hsl(0 0% 0% / 0.13);
   --tracking-normal: 0px;
   --spacing: 0.25rem;
+
+  font-family: Inter, sans-serif;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1;
+}
+
+@supports (font-variation-settings: normal) {
+  :root {
+    font-family: InterVariable, sans-serif;
+  }
 }
 
 .dark {
@@ -86,7 +96,6 @@
   --sidebar-accent-foreground: oklch(1 0 0);
   --sidebar-border: oklch(0.3368 0 0);
   --sidebar-ring: oklch(0.6057 0.1814 255.7713);
-  --font-sans: Inter, sans-serif;
   --radius: 0.3rem;
   --shadow-2xs: 0px 2px 12px 0px hsl(0 0% 0% / 0.1);
   --shadow-xs: 0px 2px 12px 0px hsl(0 0% 0% / 0.1);
@@ -137,7 +146,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --font-sans: var(--font-sans);
+  --font-sans: Inter, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
