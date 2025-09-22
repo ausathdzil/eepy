@@ -39,7 +39,9 @@ function UserButton() {
   if (user) {
     return (
       <Stack align="center" direction="row" gap="4">
-        <p className="font-medium">👋 Hey, {user.full_name || user.email}!</p>
+        <p className="hidden font-medium md:block">
+          👋 Hey, {user.full_name || user.email}!
+        </p>
         <Link href="/profile" variant="secondary">
           Profile
         </Link>
