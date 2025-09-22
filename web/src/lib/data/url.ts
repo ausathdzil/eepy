@@ -1,11 +1,27 @@
 import type { Urls } from '@/types/url.ts';
 
-export async function getRecentUrls(url: RequestInfo | URL): Promise<Urls> {
-  const params = new URLSearchParams();
-  params.set('limit', '2');
-  params.set('order', 'desc');
+export type GetUrlParams = {
+  offset: number;
+  limit: number;
+  order: string;
+};
 
-  const res = await fetch(`${url}?${params.toString()}`, {
+export async function getUrls(
+  url: RequestInfo | URL,
+  params: Partial<GetUrlParams>
+): Promise<Urls> {
+  const searchParams = new URLSearchParams();
+  if (params.offset) {
+    searchParams.set('offset', params.offset.toString());
+  }
+  if (params.limit) {
+    searchParams.set('limit', params.limit.toString());
+  }
+  if (params.order) {
+    searchParams.set('order', params.order);
+  }
+
+  const res = await fetch(`${url}?${searchParams.toString()}`, {
     method: 'GET',
     headers: {
       accept: 'application/json',

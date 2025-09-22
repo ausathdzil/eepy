@@ -13,9 +13,9 @@ import { login } from '@/lib/actions/auth.ts';
 import { API_URL } from '@/lib/utils.ts';
 
 export default function Login() {
+  const { user } = useUser();
   const navigate = useNavigate();
 
-  const { user } = useUser();
   if (user) {
     navigate('/');
   }
