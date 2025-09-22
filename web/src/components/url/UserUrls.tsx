@@ -28,8 +28,8 @@ export default function UserUrls({
     );
   }
 
-  if (!urls) {
-    return <div>No URLs found</div>;
+  if (!urls || urls.data.length === 0) {
+    return <div className="text-center">No URLs found</div>;
   }
   return (
     <div className="grid grid-cols-1 place-items-center gap-4 md:grid-cols-2 lg:grid-cols-3">

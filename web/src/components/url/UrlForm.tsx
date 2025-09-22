@@ -3,10 +3,10 @@ import useSWRMutation from 'swr/mutation';
 
 import { shortenUrl } from '@/lib/actions/url.ts';
 import { API_URL, BASE_URL } from '@/lib/utils.ts';
-import { Card, CardContent, CardFooter } from './card/Card.tsx';
-import { Button } from './ui/button.tsx';
-import { Input } from './ui/input.tsx';
-import { Label } from './ui/label.tsx';
+import { Card, CardContent, CardFooter } from '../card/Card.tsx';
+import { Button } from '../ui/button.tsx';
+import { Input } from '../ui/input.tsx';
+import { Label } from '../ui/label.tsx';
 
 export default function UrlForm() {
   const {
@@ -23,7 +23,11 @@ export default function UrlForm() {
     const short_url = formData.get('short_url') as string;
     await trigger(
       { long_url, short_url },
-      { onSuccess: () => mutate(`${API_URL}/url`) }
+      {
+        onSuccess: () => {
+          mutate((key) => Array.isArray(key) && key[0] === `${API_URL}/url`);
+        },
+      }
     );
   };
 

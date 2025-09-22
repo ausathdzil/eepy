@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { useUser } from '@/hooks/useUser.ts';
@@ -64,13 +64,12 @@ function LogoutButton() {
     logout
   );
 
-  const { mutate } = useSWRConfig();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     await trigger(null, {
       onSuccess: () => {
-        mutate(`${API_URL}/users/me`);
+        mutate(() => true);
         navigate('/auth/login');
       },
     });

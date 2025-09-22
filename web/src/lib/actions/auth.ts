@@ -44,6 +44,7 @@ export async function register(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ full_name, email, password }),
+    credentials: 'include',
   });
 
   const data = await res.json();

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { MainContainer } from '@/components/containers/Containers.tsx';
@@ -25,14 +25,12 @@ export default function Register() {
     register
   );
 
-  const { mutate } = useSWRConfig();
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     await trigger(formData, {
       onSuccess: () => {
-        mutate(`${API_URL}/users/me`);
+        mutate(() => true);
         navigate('/');
       },
     });

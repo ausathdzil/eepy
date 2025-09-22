@@ -25,8 +25,8 @@ export default function RecentUrls({
     );
   }
 
-  if (!urls) {
-    return <div>No URLs found</div>;
+  if (!urls || urls.data.length === 0) {
+    return <div>Create your first URL!</div>;
   }
 
   return (

@@ -10,10 +10,12 @@ import { useUser } from '@/hooks/useUser.ts';
 import { getUrls } from '@/lib/data/url.ts';
 import { API_URL } from '@/lib/utils.ts';
 
-const UrlForm = lazy(() => import('@/components/UrlForm.tsx'));
+const UrlForm = lazy(() => import('@/components/url/UrlForm.tsx'));
 const RecentUrls = lazy(() => import('@/components/url/RecentUrls.tsx'));
 
 export default function Home() {
+  const { user } = useUser();
+
   const {
     data: urls,
     error,
@@ -21,8 +23,6 @@ export default function Home() {
   } = useSWR([`${API_URL}/url`, { limit: 2 }], ([url, arg]) =>
     getUrls(url, arg)
   );
-
-  const { user } = useUser();
 
   if (!user) {
     return (
@@ -58,9 +58,11 @@ export default function Home() {
           <Suspense fallback={<UrlSkeleton />}>
             <RecentUrls error={error} isLoading={isLoading} urls={urls} />
           </Suspense>
-          <Link href="/profile">
-            View All URLs <ArrowRightIcon />
-          </Link>
+          {urls?.data && urls.data.length > 0 && (
+            <Link href="/profile">
+              View All URLs <ArrowRightIcon />
+            </Link>
+          )}
         </Stack>
       </Stack>
     </MainContainer>
