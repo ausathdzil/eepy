@@ -70,6 +70,10 @@ class UrlPublic(UrlBase):
 class UrlsPublic(SQLModel):
     data: list[UrlPublic]
     count: int
+    page: int
+    total_pages: int
+    has_next: bool
+    has_previous: bool
 
 
 class Token(SQLModel):

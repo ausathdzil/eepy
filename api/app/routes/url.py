@@ -1,9 +1,11 @@
+import math
 from typing import Annotated
+
 from app.deps import CurrentUser, SessionDep
 from app.models import Url, UrlCreate, UrlsPublic
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import RedirectResponse
-from sqlmodel import func, select
+from sqlmodel import func, select, text
 
 router = APIRouter(prefix="/url", tags=["url"])
 
@@ -44,24 +46,43 @@ def shorten_url(url_in: UrlCreate, session: SessionDep, current_user: CurrentUse
 def read_urls(
     session: SessionDep,
     current_user: CurrentUser,
-    offset: Annotated[int, Query(ge=0)] = 0,
+    q: Annotated[str | None, Query(max_length=255)] = None,
+    page: Annotated[int, Query(ge=1)] = 1,
     limit: Annotated[int, Query(le=100)] = 6,
     order: Annotated[str | None, Query(regex="^(asc|desc)$")] = "desc",
 ) -> UrlsPublic:
-    statement = (
-        select(Url).offset(offset).limit(limit).where(Url.user_id == current_user.id)
-    )
+    base_statement = select(Url).where(Url.user_id == current_user.id)
+
+    if q:
+        base_statement = base_statement.where(
+            text("(long_url LIKE :q OR short_url LIKE :q)").bindparams(q=f"%{q}%")
+        )
 
     if order == "desc":
-        statement = statement.order_by(Url.created_at.desc())
+        data_statement = base_statement.order_by(Url.created_at.desc())
     else:
-        statement = statement.order_by(Url.created_at.asc())
+        data_statement = base_statement.order_by(Url.created_at.asc())
 
-    count_statement = select(func.count()).select_from(statement)
+    count_statement = select(func.count()).select_from(base_statement.subquery())
     count = session.exec(count_statement).one()
 
-    urls = session.exec(statement).all()
-    return UrlsPublic(data=urls, count=count)
+    total_pages = math.ceil(count / limit) if count > 0 else 0
+    has_next = page < total_pages
+    has_previous = page > 1
+
+    offset = (page - 1) * limit
+
+    data_statement = data_statement.offset(offset).limit(limit)
+    urls = session.exec(data_statement).all()
+
+    return UrlsPublic(
+        data=urls,
+        count=count,
+        page=page,
+        total_pages=total_pages,
+        has_next=has_next,
+        has_previous=has_previous,
+    )
 
 
 @router.get("/{short_url}")
