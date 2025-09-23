@@ -13,7 +13,33 @@
         "useFilenamingConvention": {
           "level": "error",
           "options": {
-            "filenameCases": ["PascalCase", "kebab-case", "camelCase"]
+            "filenameCases": [
+              "camelCase",
+              "kebab-case",
+              "PascalCase",
+              "snake_case"
+            ]
+          }
+        },
+        "useNamingConvention": {
+          "level": "error",
+          "options": {
+            "conventions": [
+              {
+                "selector": {
+                  "kind": "typeProperty",
+                  "scope": "any"
+                },
+                "formats": ["camelCase", "snake_case"]
+              },
+              {
+                "selector": {
+                  "kind": "objectLiteralMember",
+                  "scope": "any"
+                },
+                "formats": ["camelCase", "snake_case"]
+              }
+            ]
           }
         }
       }

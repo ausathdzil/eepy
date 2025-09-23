@@ -3,15 +3,15 @@ import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils.ts';
 import styles from './typography.module.css';
 
-export function TypographyH1({ className, ...props }: ComponentProps<'h1'>) {
+export function Title({ className, ...props }: ComponentProps<'h1'>) {
   return <h1 className={cn(styles.h1, className)} {...props} />;
 }
 
-export function TypographyH2({ className, ...props }: ComponentProps<'h2'>) {
+export function Heading({ className, ...props }: ComponentProps<'h2'>) {
   return <h2 className={cn(styles.h2, className)} {...props} />;
 }
 
-export function TypographyP({ className, ...props }: ComponentProps<'p'>) {
+export function Text({ className, ...props }: ComponentProps<'p'>) {
   return <p className={cn(styles.p, className)} {...props} />;
 }
 

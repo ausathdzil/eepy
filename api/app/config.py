@@ -1,11 +1,11 @@
 import secrets
-from typing import Annotated, Any, Literal
+from typing import Annotated, Literal
 
 from pydantic import AnyUrl, BeforeValidator, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-def parse_cors(v: Any) -> list[str] | str:
+def parse_cors(v: AnyUrl | str) -> list[str] | str:
     if isinstance(v, str) and not v.startswith("["):
         return [i.strip() for i in v.split(",")]
     elif isinstance(v, list | str):
@@ -27,9 +27,9 @@ class Settings(BaseSettings):
     FRONTEND_HOST: str = "http://localhost:5173"
     ENVIRONMENT: Literal["local", "staging", "production"] = "local"
 
-    BACKEND_CORS_ORIGINS: Annotated[list[AnyUrl] | str, BeforeValidator(parse_cors)] = (
-        []
-    )
+    BACKEND_CORS_ORIGINS: Annotated[
+        list[AnyUrl] | str, BeforeValidator(parse_cors)
+    ] = []
 
     @computed_field
     @property

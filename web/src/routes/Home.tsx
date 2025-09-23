@@ -1,11 +1,11 @@
 import { ArrowRightIcon } from 'lucide-react';
 import { lazy, Suspense } from 'react';
-import useSWR from 'swr';
+import useSwr from 'swr';
 
 import { MainContainer, Stack } from '@/components/containers/Containers.tsx';
 import { Link } from '@/components/link/Link.tsx';
 import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
-import { TypographyH2 } from '@/components/typography/Typography.tsx';
+import { Heading } from '@/components/typography/Typography.tsx';
 import { useUser } from '@/hooks/useUser.ts';
 import { getUrls } from '@/lib/data/url.ts';
 import { API_URL } from '@/lib/utils.ts';
@@ -20,7 +20,7 @@ export default function Home() {
     data: urls,
     error,
     isLoading,
-  } = useSWR([`${API_URL}/url`, { limit: 2 }], ([url, arg]) =>
+  } = useSwr([`${API_URL}/url`, { limit: 2 }], ([url, arg]) =>
     getUrls(url, arg)
   );
 
@@ -41,7 +41,7 @@ export default function Home() {
           direction="column"
           gap="4"
         >
-          <TypographyH2>Shorten URL</TypographyH2>
+          <Heading>Shorten URL</Heading>
           <Suspense
             fallback={<Skeleton className="h-[234px] w-full max-w-md" />}
           >
@@ -54,7 +54,7 @@ export default function Home() {
           direction="column"
           gap="4"
         >
-          <TypographyH2>Recently Created URLs</TypographyH2>
+          <Heading>Recently Created URLs</Heading>
           <Suspense fallback={<UrlSkeleton />}>
             <RecentUrls error={error} isLoading={isLoading} urls={urls} />
           </Suspense>

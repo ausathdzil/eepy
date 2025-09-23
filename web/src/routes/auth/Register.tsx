@@ -1,10 +1,11 @@
+import { useId } from 'react';
 import { useNavigate } from 'react-router';
 import { mutate } from 'swr';
-import useSWRMutation from 'swr/mutation';
+import useSwrMutation from 'swr/mutation';
 
 import { MainContainer } from '@/components/containers/Containers.tsx';
 import { Link } from '@/components/link/Link.tsx';
-import { TypographyH1 } from '@/components/typography/Typography.tsx';
+import { Title } from '@/components/typography/Typography.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
@@ -15,12 +16,13 @@ import { API_URL } from '@/lib/utils.ts';
 export default function Register() {
   const { user } = useUser();
   const navigate = useNavigate();
+  const id = useId();
 
   if (user) {
     navigate('/');
   }
 
-  const { error, trigger, isMutating } = useSWRMutation(
+  const { error, trigger, isMutating } = useSwrMutation(
     `${API_URL}/auth/register`,
     register
   );
@@ -38,30 +40,30 @@ export default function Register() {
 
   return (
     <MainContainer className="items-center justify-center">
-      <TypographyH1>Register</TypographyH1>
+      <Title>Register</Title>
       <form
         className="mx-auto w-full max-w-sm space-y-4"
         onSubmit={handleSubmit}
       >
-        <Label htmlFor="full_name">Full Name</Label>
+        <Label htmlFor={`${id}-full_name`}>Full Name</Label>
         <Input
-          id="full_name"
+          id={`${id}-full_name`}
           name="full_name"
           placeholder="John Doe"
           required
           type="text"
         />
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor={`${id}-email`}>Email</Label>
         <Input
-          id="email"
+          id={`${id}-email`}
           name="email"
           placeholder="m@example.com"
           required
           type="email"
         />
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor={`${id}-password`}>Password</Label>
         <Input
-          id="password"
+          id={`${id}-password`}
           minLength={8}
           name="password"
           required

@@ -33,7 +33,7 @@ export async function register(
   url: RequestInfo | URL,
   { arg }: { arg: FormData }
 ) {
-  const full_name = arg.get('full_name') as string;
+  const fullName = arg.get('full_name') as string;
   const email = arg.get('email') as string;
   const password = arg.get('password') as string;
 
@@ -43,7 +43,7 @@ export async function register(
       accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ full_name, email, password }),
+    body: JSON.stringify({ full_name: fullName, email, password }),
     credentials: 'include',
   });
 

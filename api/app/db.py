@@ -11,8 +11,8 @@ engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_app: FastAPI):
     SQLModel.metadata.create_all(engine)
     yield
-    SQLModel.metadata.drop_all(engine)
+    # SQLModel.metadata.drop_all(engine)
     engine.dispose()

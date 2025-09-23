@@ -1,5 +1,6 @@
+import { useId } from 'react';
 import { mutate } from 'swr';
-import useSWRMutation from 'swr/mutation';
+import useSwrMutation from 'swr/mutation';
 
 import { shortenUrl } from '@/lib/actions/url.ts';
 import { API_URL, BASE_URL } from '@/lib/utils.ts';
@@ -9,20 +10,22 @@ import { Input } from '../ui/input.tsx';
 import { Label } from '../ui/label.tsx';
 
 export default function UrlForm() {
+  const id = useId();
+
   const {
     data: _data,
     error,
     trigger,
     isMutating,
-  } = useSWRMutation(`${API_URL}/url`, shortenUrl);
+  } = useSwrMutation(`${API_URL}/url`, shortenUrl);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const long_url = formData.get('long_url') as string;
-    const short_url = formData.get('short_url') as string;
+    const longUrl = formData.get('long_url') as string;
+    const shortUrl = formData.get('short_url') as string;
     await trigger(
-      { long_url, short_url },
+      { long_url: longUrl, short_url: shortUrl },
       {
         onSuccess: () => {
           mutate((key) => Array.isArray(key) && key[0] === `${API_URL}/url`);
@@ -36,9 +39,9 @@ export default function UrlForm() {
       <form className="space-y-4" onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="long_url">Enter your URL</Label>
+            <Label htmlFor={`${id}-long_url`}>Enter your URL</Label>
             <Input
-              id="long_url"
+              id={`${id}-long_url`}
               name="long_url"
               placeholder="https://example.com"
               required
@@ -46,14 +49,16 @@ export default function UrlForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="short_url">Enter custom short URL (optional)</Label>
+            <Label htmlFor={`${id}-short_url`}>
+              Enter custom short URL (optional)
+            </Label>
             <div className="flex rounded-md shadow-xs">
               <span className="inline-flex items-center rounded-s-md border border-input bg-background px-3 text-muted-foreground text-sm">
                 {BASE_URL}/u/
               </span>
               <Input
                 className="-ms-px rounded-s-none shadow-none"
-                id="short_url"
+                id={`${id}-short_url`}
                 name="short_url"
                 placeholder="blog"
                 type="text"

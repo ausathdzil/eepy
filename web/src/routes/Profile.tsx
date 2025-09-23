@@ -1,10 +1,10 @@
 import { lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router';
-import useSWR from 'swr';
+import useSwr from 'swr';
 
 import { MainContainer } from '@/components/containers/Containers.tsx';
 import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
-import { TypographyH1 } from '@/components/typography/Typography.tsx';
+import { Title } from '@/components/typography/Typography.tsx';
 import { useUser } from '@/hooks/useUser.ts';
 import { getUrls } from '@/lib/data/url.ts';
 import { API_URL } from '@/lib/utils.ts';
@@ -25,11 +25,11 @@ export default function Profile() {
     data: urls,
     error,
     isLoading,
-  } = useSWR([`${API_URL}/url`, params], ([url, arg]) => getUrls(url, arg));
+  } = useSwr([`${API_URL}/url`, params], ([url, arg]) => getUrls(url, arg));
 
   return (
     <MainContainer>
-      <TypographyH1>My URLs</TypographyH1>
+      <Title>My URLs</Title>
       <Suspense fallback={<UrlSkeleton />}>
         <UserUrls error={error} isLoading={isLoading} urls={urls} />
       </Suspense>

@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSwr from 'swr';
 
 import { UserContext } from '@/hooks/useUser.ts';
 import { getUser } from '@/lib/data/user.ts';
@@ -9,7 +9,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     data: user,
     error,
     isLoading,
-  } = useSWR(`${API_URL}/users/me`, getUser);
+  } = useSwr(`${API_URL}/users/me`, getUser);
 
   const value = {
     user,
