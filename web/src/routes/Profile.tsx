@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router';
 import useSWR from 'swr';
 
 import { MainContainer } from '@/components/containers/Containers.tsx';
+import { Search } from '@/components/Search.tsx';
 import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
 import { Title } from '@/components/typography/Typography.tsx';
 import { useUser } from '@/hooks/useUser.ts';
@@ -23,9 +24,11 @@ export default function Profile() {
     }
   }, [user, isLoading, navigate]);
 
+  const query = searchParams.get('q') || '';
   const page = searchParams.get('page') || '1';
   const limit = searchParams.get('limit') || '6';
-  const params = { page, limit };
+
+  const params = { q: query, page, limit };
 
   const {
     data: urls,
@@ -39,6 +42,7 @@ export default function Profile() {
     <MainContainer>
       <Title>My URLs</Title>
       <Suspense fallback={<UrlSkeleton />}>
+        <Search placeholder="Search URLs..." />
         <UserUrls error={error} isLoading={isUrlsLoading} urls={urls} />
       </Suspense>
     </MainContainer>

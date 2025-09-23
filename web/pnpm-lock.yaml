@@ -44,6 +44,9 @@ importers:
       tailwindcss:
         specifier: ^4.1.13
         version: 4.1.13
+      use-debounce:
+        specifier: ^10.0.6
+        version: 10.0.6(react@19.1.1)
     devDependencies:
       '@biomejs/biome':
         specifier: 2.2.4
@@ -1458,6 +1461,12 @@ packages:
     peerDependencies:
       browserslist: '>= 4.21.0'
 
+  use-debounce@10.0.6:
+    resolution: {integrity: sha512-C5OtPyhAZgVoteO9heXMTdW7v/IbFI+8bSVKYCJrSmiWWCLsbUxiBSp4t9v0hNBTGY97bT72ydDIDyGSFWfwXg==}
+    engines: {node: '>= 16.0.0'}
+    peerDependencies:
+      react: '*'
+
   use-sync-external-store@1.5.0:
     resolution: {integrity: sha512-Rb46I4cGGVBmjamjphe8L/UnvJD+uPPtTkNvX5mZgqdbavhI4EbgIWJiIHXJ8bc/i9EQGPRh4DwEURJ552Do0A==}
     peerDependencies:
@@ -2730,6 +2739,10 @@ snapshots:
       browserslist: 4.26.0
       escalade: 3.2.0
       picocolors: 1.1.1
+
+  use-debounce@10.0.6(react@19.1.1):
+    dependencies:
+      react: 19.1.1
 
   use-sync-external-store@1.5.0(react@19.1.1):
     dependencies:
