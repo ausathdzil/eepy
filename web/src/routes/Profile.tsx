@@ -1,16 +1,14 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import useSWR from 'swr';
 
 import { MainContainer } from '@/components/containers/Containers.tsx';
 import { Search } from '@/components/Search.tsx';
-import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
 import { Title } from '@/components/typography/Typography.tsx';
+import { UserUrls } from '@/components/url/UserUrls.tsx';
 import { useUser } from '@/hooks/useUser.ts';
 import { getUrls } from '@/lib/data/url.ts';
 import { API_URL } from '@/lib/utils.ts';
-
-const UserUrls = lazy(() => import('@/components/url/UserUrls.tsx'));
 
 export default function Profile() {
   const { user, isLoading } = useUser();
@@ -41,23 +39,8 @@ export default function Profile() {
   return (
     <MainContainer>
       <Title>My URLs</Title>
-      <Suspense fallback={<UrlSkeleton />}>
-        <Search placeholder="Search URLs..." />
-        <UserUrls error={error} isLoading={isUrlsLoading} urls={urls} />
-      </Suspense>
+      {urls && urls.data.length > 0 && <Search placeholder="Search URLs..." />}
+      <UserUrls error={error} isLoading={isUrlsLoading} urls={urls} />
     </MainContainer>
-  );
-}
-
-function UrlSkeleton() {
-  return (
-    <div className="grid grid-cols-1 place-items-center gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <Skeleton className="h-42 w-full max-w-md" />
-      <Skeleton className="h-42 w-full max-w-md" />
-      <Skeleton className="h-42 w-full max-w-md" />
-      <Skeleton className="h-42 w-full max-w-md" />
-      <Skeleton className="h-42 w-full max-w-md" />
-      <Skeleton className="h-42 w-full max-w-md" />
-    </div>
   );
 }

@@ -7,7 +7,7 @@ import {
 import { Skeleton } from '../skeleton/Skeleton.tsx';
 import { UrlCard } from './UrlCard.tsx';
 
-export default function UserUrls({
+export function UserUrls({
   urls,
   error,
   isLoading,

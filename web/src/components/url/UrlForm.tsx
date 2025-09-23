@@ -9,7 +9,7 @@ import { Button } from '../ui/button.tsx';
 import { Input } from '../ui/input.tsx';
 import { Label } from '../ui/label.tsx';
 
-export default function UrlForm() {
+export function UrlForm() {
   const id = useId();
 
   const {

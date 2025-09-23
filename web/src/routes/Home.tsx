@@ -1,17 +1,14 @@
 import { ArrowRightIcon } from 'lucide-react';
-import { lazy, Suspense } from 'react';
 import useSWR from 'swr';
 
 import { MainContainer, Stack } from '@/components/containers/Containers.tsx';
 import { Link } from '@/components/link/Link.tsx';
-import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
 import { Heading } from '@/components/typography/Typography.tsx';
+import { RecentUrls } from '@/components/url/RecentUrls.tsx';
+import { UrlForm } from '@/components/url/UrlForm.tsx';
 import { useUser } from '@/hooks/useUser.ts';
 import { getUrls } from '@/lib/data/url.ts';
 import { API_URL } from '@/lib/utils.ts';
-
-const UrlForm = lazy(() => import('@/components/url/UrlForm.tsx'));
-const RecentUrls = lazy(() => import('@/components/url/RecentUrls.tsx'));
 
 export default function Home() {
   const { user, isLoading: isUserLoading } = useUser();
@@ -45,11 +42,7 @@ export default function Home() {
           gap="4"
         >
           <Heading>Shorten URL</Heading>
-          <Suspense
-            fallback={<Skeleton className="h-[234px] w-full max-w-md" />}
-          >
-            <UrlForm />
-          </Suspense>
+          <UrlForm />
         </Stack>
         <Stack
           align="center"
@@ -58,10 +51,8 @@ export default function Home() {
           gap="4"
         >
           <Heading>Recently Created URLs</Heading>
-          <Suspense fallback={<UrlSkeleton />}>
-            <RecentUrls error={error} isLoading={isLoading} urls={urls} />
-          </Suspense>
-          {urls?.data && urls.data.length > 0 && (
+          <RecentUrls error={error} isLoading={isLoading} urls={urls} />
+          {urls && urls.data.length > 0 && (
             <Link href="/profile">
               View All URLs <ArrowRightIcon />
             </Link>
@@ -69,14 +60,5 @@ export default function Home() {
         </Stack>
       </Stack>
     </MainContainer>
-  );
-}
-
-function UrlSkeleton() {
-  return (
-    <Stack align="center" className="w-full" gap="8">
-      <Skeleton className="h-42 w-full max-w-md" />
-      <Skeleton className="h-42 w-full max-w-md" />
-    </Stack>
   );
 }

@@ -3,7 +3,7 @@ import { Stack } from '../containers/Containers.tsx';
 import { Skeleton } from '../skeleton/Skeleton.tsx';
 import { UrlCard } from './UrlCard.tsx';
 
-export default function RecentUrls({
+export function RecentUrls({
   urls,
   error,
   isLoading,
