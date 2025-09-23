@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import useSWR from 'swr';
 
 import { MainContainer } from '@/components/containers/Containers.tsx';
@@ -15,13 +15,17 @@ export default function Profile() {
   const { user, isLoading } = useUser();
   const navigate = useNavigate();
 
+  const [searchParams] = useSearchParams();
+
   useEffect(() => {
     if (!(isLoading || user)) {
       navigate('/auth/login');
     }
   }, [user, isLoading, navigate]);
 
-  const params = { offset: 0, limit: 6 };
+  const page = searchParams.get('page') || '1';
+  const limit = searchParams.get('limit') || '6';
+  const params = { page, limit };
 
   const {
     data: urls,

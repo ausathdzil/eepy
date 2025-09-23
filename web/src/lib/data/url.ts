@@ -1,8 +1,8 @@
 import type { Urls } from '@/types/url.ts';
 
 export type GetUrlParams = {
-  offset: number;
-  limit: number;
+  page: string;
+  limit: string;
   order: string;
 };
 
@@ -11,11 +11,11 @@ export async function getUrls(
   params: Partial<GetUrlParams>
 ): Promise<Urls> {
   const searchParams = new URLSearchParams();
-  if (params.offset) {
-    searchParams.set('offset', params.offset.toString());
+  if (params.page) {
+    searchParams.set('page', params.page);
   }
   if (params.limit) {
-    searchParams.set('limit', params.limit.toString());
+    searchParams.set('limit', params.limit);
   }
   if (params.order) {
     searchParams.set('order', params.order);

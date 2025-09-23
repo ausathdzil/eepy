@@ -19,7 +19,7 @@ export default function Home() {
     data: urls,
     error,
     isLoading,
-  } = useSWR(user ? [`${API_URL}/url`, { limit: 2 }] : null, ([url, arg]) =>
+  } = useSWR(user ? [`${API_URL}/url`, { limit: '2' }] : null, ([url, arg]) =>
     getUrls(url, arg)
   );
 

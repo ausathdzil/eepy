@@ -12,4 +12,8 @@ export type Url = {
 export type Urls = {
   data: Url[];
   count: number;
+  page: number;
+  total_pages: number;
+  has_next: boolean;
+  has_previous: boolean;
 };
