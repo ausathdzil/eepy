@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from 'lucide-react';
 import { lazy, Suspense } from 'react';
-import useSwr from 'swr';
+import useSWR from 'swr';
 
 import { MainContainer, Stack } from '@/components/containers/Containers.tsx';
 import { Link } from '@/components/link/Link.tsx';
@@ -20,7 +20,7 @@ export default function Home() {
     data: urls,
     error,
     isLoading,
-  } = useSwr([`${API_URL}/url`, { limit: 2 }], ([url, arg]) =>
+  } = useSWR([`${API_URL}/url`, { limit: 2 }], ([url, arg]) =>
     getUrls(url, arg)
   );
 

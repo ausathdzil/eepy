@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router';
 import { mutate } from 'swr';
-import useSwrMutation from 'swr/mutation';
+import useSWRMutation from 'swr/mutation';
 
 import { useUser } from '@/hooks/useUser.ts';
 import { logout } from '@/lib/actions/auth.ts';
@@ -59,7 +59,7 @@ function UserButton() {
 }
 
 function LogoutButton() {
-  const { trigger, isMutating } = useSwrMutation(
+  const { trigger, isMutating } = useSWRMutation(
     `${API_URL}/auth/logout`,
     logout
   );

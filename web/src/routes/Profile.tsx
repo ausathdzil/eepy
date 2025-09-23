@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router';
-import useSwr from 'swr';
+import useSWR from 'swr';
 
 import { MainContainer } from '@/components/containers/Containers.tsx';
 import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
@@ -25,7 +25,7 @@ export default function Profile() {
     data: urls,
     error,
     isLoading,
-  } = useSwr([`${API_URL}/url`, params], ([url, arg]) => getUrls(url, arg));
+  } = useSWR([`${API_URL}/url`, params], ([url, arg]) => getUrls(url, arg));
 
   return (
     <MainContainer>

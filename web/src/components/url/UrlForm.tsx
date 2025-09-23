@@ -1,6 +1,6 @@
 import { useId } from 'react';
 import { mutate } from 'swr';
-import useSwrMutation from 'swr/mutation';
+import useSWRMutation from 'swr/mutation';
 
 import { shortenUrl } from '@/lib/actions/url.ts';
 import { API_URL, BASE_URL } from '@/lib/utils.ts';
@@ -17,7 +17,7 @@ export default function UrlForm() {
     error,
     trigger,
     isMutating,
-  } = useSwrMutation(`${API_URL}/url`, shortenUrl);
+  } = useSWRMutation(`${API_URL}/url`, shortenUrl);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

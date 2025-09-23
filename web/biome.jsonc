@@ -39,7 +39,8 @@
                 },
                 "formats": ["camelCase", "snake_case"]
               }
-            ]
+            ],
+            "strictCase": false
           }
         }
       }

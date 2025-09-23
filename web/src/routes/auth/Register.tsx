@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import { useNavigate } from 'react-router';
 import { mutate } from 'swr';
-import useSwrMutation from 'swr/mutation';
+import useSWRMutation from 'swr/mutation';
 
 import { MainContainer } from '@/components/containers/Containers.tsx';
 import { Link } from '@/components/link/Link.tsx';
@@ -22,7 +22,7 @@ export default function Register() {
     navigate('/');
   }
 
-  const { error, trigger, isMutating } = useSwrMutation(
+  const { error, trigger, isMutating } = useSWRMutation(
     `${API_URL}/auth/register`,
     register
   );
