@@ -9,18 +9,12 @@ import { Title } from '@/components/typography/Typography.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
-import { useUser } from '@/hooks/useUser.ts';
 import { login } from '@/lib/actions/auth.ts';
 import { API_URL } from '@/lib/utils.ts';
 
 export default function Login() {
-  const { user } = useUser();
   const navigate = useNavigate();
   const id = useId();
-
-  if (user) {
-    navigate('/');
-  }
 
   const { error, trigger, isMutating } = useSWRMutation(
     `${API_URL}/auth/login`,

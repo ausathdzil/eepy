@@ -59,12 +59,12 @@ function UserButton() {
 }
 
 function LogoutButton() {
+  const navigate = useNavigate();
+
   const { trigger, isMutating } = useSWRMutation(
     `${API_URL}/auth/logout`,
     logout
   );
-
-  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await trigger(null, {

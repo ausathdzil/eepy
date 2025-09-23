@@ -14,15 +14,18 @@ const UrlForm = lazy(() => import('@/components/url/UrlForm.tsx'));
 const RecentUrls = lazy(() => import('@/components/url/RecentUrls.tsx'));
 
 export default function Home() {
-  const { user } = useUser();
-
+  const { user, isLoading: isUserLoading } = useUser();
   const {
     data: urls,
     error,
     isLoading,
-  } = useSWR([`${API_URL}/url`, { limit: 2 }], ([url, arg]) =>
+  } = useSWR(user ? [`${API_URL}/url`, { limit: 2 }] : null, ([url, arg]) =>
     getUrls(url, arg)
   );
+
+  if (isUserLoading) {
+    return null;
+  }
 
   if (!user) {
     return (

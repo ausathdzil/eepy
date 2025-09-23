@@ -40,7 +40,7 @@ class UserPublic(UserBase):
 
 class UrlBase(SQLModel):
     long_url: str = Field(index=True)
-    short_url: str | None = Field(default=None, index=True)
+    short_url: str | None = Field(default=None, index=True, unique=True)
 
 
 class UrlCreate(UrlBase):

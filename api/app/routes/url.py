@@ -1,3 +1,4 @@
+from typing import Annotated
 from app.deps import CurrentUser, SessionDep
 from app.models import Url, UrlCreate, UrlsPublic
 from fastapi import APIRouter, HTTPException, Query
@@ -18,23 +19,24 @@ def base62_encode(num: int) -> str:
 
 @router.post("/")
 def shorten_url(url_in: UrlCreate, session: SessionDep, current_user: CurrentUser):
-    url = Url(long_url=url_in.long_url, user_id=current_user.id)
-    if url_in.short_url:
-        statement = select(Url).where(Url.short_url == url_in.short_url)
-        existing_url = session.exec(statement).first()
-        if existing_url:
+    url = Url.model_validate(url_in, update={"user_id": current_user.id})
+    if url.short_url:
+        statement = select(Url).where(Url.short_url == url.short_url)
+        if session.exec(statement).first():
             raise HTTPException(status_code=400, detail="Short URL already exists")
-        url.short_url = url_in.short_url
-    session.add(url)
-    session.commit()
-    session.refresh(url)
 
+    session.add(url)
+    session.flush()
     if not url.short_url:
         url.short_url = base62_encode(url.id)
-    session.add(url)
-    session.commit()
-    session.refresh(url)
 
+    try:
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise HTTPException(status_code=400, detail="Short URL already exists")
+
+    session.refresh(url)
     return url
 
 
@@ -42,21 +44,22 @@ def shorten_url(url_in: UrlCreate, session: SessionDep, current_user: CurrentUse
 def read_urls(
     session: SessionDep,
     current_user: CurrentUser,
-    offset: int = 0,
-    limit: int = Query(default=100, le=100),
-    order: str = Query(default="desc", regex="^(asc|desc)$"),
+    offset: Annotated[int, Query(ge=0)] = 0,
+    limit: Annotated[int, Query(le=100)] = 6,
+    order: Annotated[str | None, Query(regex="^(asc|desc)$")] = "desc",
 ) -> UrlsPublic:
-    count_statement = (
-        select(func.count()).select_from(Url).where(Url.user_id == current_user.id)
-    )
-    count = session.exec(count_statement).one()
     statement = (
         select(Url).offset(offset).limit(limit).where(Url.user_id == current_user.id)
     )
+
     if order == "desc":
         statement = statement.order_by(Url.created_at.desc())
     else:
         statement = statement.order_by(Url.created_at.asc())
+
+    count_statement = select(func.count()).select_from(statement)
+    count = session.exec(count_statement).one()
+
     urls = session.exec(statement).all()
     return UrlsPublic(data=urls, count=count)
 
