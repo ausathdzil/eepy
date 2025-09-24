@@ -21,7 +21,7 @@ export function UrlCard({
 }: { url: Url } & ComponentProps<'div'>) {
   return (
     <Card
-      className={cn('@container/card w-full max-w-md', className)}
+      className={cn('@container/card w-full', className)}
       key={url.id}
       {...props}
     >
