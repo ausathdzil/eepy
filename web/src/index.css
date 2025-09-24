@@ -1,4 +1,3 @@
-/* biome-ignore-all lint/suspicious/noUnknownAtRules: Required for Tailwind */
 @import "tailwindcss";
 
 :root {
@@ -174,9 +173,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground antialiased;
   }
+
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;

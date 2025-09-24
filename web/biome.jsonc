@@ -43,6 +43,9 @@
             "strictCase": false
           }
         }
+      },
+      "suspicious": {
+        "noUnknownAtRules": "off"
       }
     }
   },
