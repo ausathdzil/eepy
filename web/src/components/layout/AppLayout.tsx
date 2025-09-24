@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from 'react-router';
 import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { useAuthStore } from '@/hooks/useAuthStore.ts';
 import { useUser } from '@/hooks/useUser.ts';
 import { logout } from '@/lib/actions/auth.ts';
 import { API_URL } from '@/lib/utils.ts';
@@ -59,6 +60,7 @@ function UserButton() {
 }
 
 function LogoutButton() {
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const navigate = useNavigate();
 
   const { trigger, isMutating } = useSWRMutation(
@@ -69,6 +71,7 @@ function LogoutButton() {
   const handleLogout = async () => {
     await trigger(null, {
       onSuccess: () => {
+        setAccessToken(null);
         mutate(() => true);
         navigate('/auth/login');
       },

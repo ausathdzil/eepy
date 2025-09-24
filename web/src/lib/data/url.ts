@@ -1,17 +1,25 @@
 import type { Urls } from '@/types/url.ts';
 
-export type GetUrlParams = {
+type GetUrlParams = {
   q: string;
   page: string;
   limit: string;
   order: string;
 };
 
+type GetUrlArg = {
+  params: Partial<GetUrlParams>;
+  token: string | null | undefined;
+};
+
 export async function getUrls(
   url: RequestInfo | URL,
-  params: Partial<GetUrlParams>
+  arg: GetUrlArg
 ): Promise<Urls> {
+  const params = arg.params;
+  const token = arg.token;
   const searchParams = new URLSearchParams();
+
   if (params.q) {
     searchParams.set('q', params.q);
   }
@@ -29,8 +37,8 @@ export async function getUrls(
     method: 'GET',
     headers: {
       accept: 'application/json',
+      Authorization: `Bearer ${token}`,
     },
-    credentials: 'include',
   });
 
   const data = await res.json();

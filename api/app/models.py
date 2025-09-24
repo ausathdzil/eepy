@@ -29,9 +29,7 @@ class User(UserBase, table=True):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-    url: list["Url"] = Relationship(
-        back_populates="user", cascade_delete=True
-    )  # pyright: ignore[reportAny]
+    url: list["Url"] = Relationship(back_populates="user", cascade_delete=True)  # pyright: ignore[reportAny]
 
 
 class UserPublic(UserBase):
@@ -46,7 +44,7 @@ class UrlBase(SQLModel):
 
 
 class UrlCreate(UrlBase):
-    long_url: HttpUrl  # pyright: ignore[reportIncompatibleVariableOverride]
+    pass
 
 
 class Url(UrlBase, table=True):
@@ -84,3 +82,4 @@ class Token(SQLModel):
 
 class TokenPayload(SQLModel):
     sub: str | None = None
+    type: str | None = None

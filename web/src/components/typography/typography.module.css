@@ -1,6 +1,6 @@
 .h1 {
   font-size: var(--text-3xl);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-medium);
   letter-spacing: calc(var(--tracking-normal) - 0.025em);
   line-height: var(--text-3xl--line-height);
   scroll-margin: calc(var(--spacing) * 20);
@@ -10,7 +10,7 @@
 
 .h2 {
   font-size: var(--text-2xl);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
   line-height: var(--text-2xl--line-height);
   letter-spacing: calc(var(--tracking-normal) - 0.025em);
   padding-bottom: calc(var(--spacing) * 2);

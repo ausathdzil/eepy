@@ -1,12 +1,20 @@
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
+import jwt
 from app.config import settings
 from app.deps import SessionDep
-from app.models import Token, User, UserCreate, UserPublic
-from app.security import create_access_token, get_password_hash, verify_password
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from app.models import Token, TokenPayload, User, UserCreate
+from app.security import (
+    create_access_token,
+    create_refresh_token,
+    get_password_hash,
+    verify_password,
+)
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
+from jwt.exceptions import InvalidTokenError
+from pydantic import ValidationError
 from sqlmodel import Session, select
 
 
@@ -42,23 +50,24 @@ def login_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRES_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
-    )
+    access_token = create_access_token({"sub": user.email}, access_token_expires)
+
+    refresh_token_expires = timedelta(minutes=settings.REFRESH_TOKEN_EXPIRES_MINUTES)
+    refresh_token = create_refresh_token({"sub": user.email}, refresh_token_expires)
 
     response.set_cookie(
-        key="access_token",
-        value=access_token,
+        key="refresh_token",
+        value=refresh_token,
         httponly=True,
         secure=settings.ENVIRONMENT != "local",
-        expires=datetime.now(timezone.utc) + access_token_expires,
+        expires=datetime.now(timezone.utc) + refresh_token_expires,
         samesite="lax",
         path="/",
     )
     return Token(access_token=access_token, token_type="bearer")
 
 
-@router.post("/register", response_model=UserPublic)
+@router.post("/register", response_model=Token)
 def register_user(session: SessionDep, user_in: UserCreate, response: Response):
     existing_user = get_user_by_email(session, user_in.email)
     if existing_user:
@@ -75,25 +84,55 @@ def register_user(session: SessionDep, user_in: UserCreate, response: Response):
     session.refresh(user)
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRES_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
-    )
+    access_token = create_access_token({"sub": user.email}, access_token_expires)
+
+    refresh_token_expires = timedelta(minutes=settings.REFRESH_TOKEN_EXPIRES_MINUTES)
+    refresh_token = create_refresh_token({"sub": user.email}, refresh_token_expires)
 
     response.set_cookie(
-        key="access_token",
-        value=access_token,
-        expires=datetime.now(timezone.utc) + access_token_expires,
-        secure=settings.ENVIRONMENT != "local",
+        key="refresh_token",
+        value=refresh_token,
         httponly=True,
+        secure=settings.ENVIRONMENT != "local",
+        expires=datetime.now(timezone.utc) + refresh_token_expires,
+        samesite="lax",
+        path="/",
     )
-    return user
+    return Token(access_token=access_token, token_type="bearer")
 
 
 @router.post("/logout")
 def logout_user(response: Response):
     response.delete_cookie(
-        key="access_token",
-        secure=settings.ENVIRONMENT != "local",
+        key="refresh_token",
         httponly=True,
+        secure=settings.ENVIRONMENT != "local",
+        path="/",
     )
     return {"ok": True}
+
+
+@router.post("/refresh", response_model=Token)
+def refresh_access_token(refresh_token: Annotated[str | None, Cookie()] = None):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+    )
+
+    if refresh_token is None:
+        raise credentials_exception
+
+    try:
+        payload = jwt.decode(  # pyright: ignore[reportAny, reportUnknownMemberType]
+            refresh_token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
+        token_payload = TokenPayload.model_validate(payload)
+        if token_payload.type != "refresh":
+            raise credentials_exception
+    except (InvalidTokenError, ValidationError):
+        raise credentials_exception
+
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRES_MINUTES)
+    access_token = create_access_token({"sub": token_payload.sub}, access_token_expires)
+
+    return Token(access_token=access_token, token_type="bearer")

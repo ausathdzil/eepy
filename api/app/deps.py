@@ -20,19 +20,15 @@ def get_session():
 
 SessionDep = Annotated[Session, Depends(get_session)]
 TokenDep = Annotated[str, Depends(oauth2_scheme)]
+CookieDep = Annotated[str | None, Cookie()]
 
 
-def get_current_user(
-    session: SessionDep, access_token: Annotated[str | None, Cookie()] = None
-):
+def get_current_user(session: SessionDep, access_token: TokenDep):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    if access_token is None:
-        raise credentials_exception
-
     try:
         payload = jwt.decode(  # pyright: ignore[reportAny, reportUnknownMemberType]
             access_token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
@@ -40,7 +36,6 @@ def get_current_user(
         token_payload = TokenPayload.model_validate(payload)
     except (InvalidTokenError, ValidationError):
         raise credentials_exception
-
     statement = select(User).where(User.email == token_payload.sub)
     user = session.exec(statement).first()
     if user is None:

@@ -9,10 +9,12 @@ import { Title } from '@/components/typography/Typography.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
+import { useAuthStore } from '@/hooks/useAuthStore.ts';
 import { login } from '@/lib/actions/auth.ts';
 import { API_URL } from '@/lib/utils.ts';
 
 export default function Login() {
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const navigate = useNavigate();
   const id = useId();
 
@@ -25,7 +27,8 @@ export default function Login() {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     await trigger(formData, {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        setAccessToken(data.access_token);
         mutate(() => true);
         navigate('/');
       },

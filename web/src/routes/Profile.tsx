@@ -18,7 +18,7 @@ import { API_URL } from '@/lib/utils.ts';
 import type { Urls } from '@/types/url.ts';
 
 export default function Profile() {
-  const { user, isLoading } = useUser();
+  const { user, token, isLoading } = useUser();
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
@@ -39,8 +39,9 @@ export default function Profile() {
     data: urls,
     error,
     isLoading: isUrlsLoading,
-  } = useSWR(user ? [`${API_URL}/url`, params] : null, ([url, arg]) =>
-    getUrls(url, arg)
+  } = useSWR(
+    user ? [`${API_URL}/url`, { params, token }] : null,
+    ([url, arg]) => getUrls(url, arg)
   );
 
   return (

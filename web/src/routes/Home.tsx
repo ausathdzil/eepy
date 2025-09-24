@@ -20,14 +20,16 @@ import { API_URL, BASE_URL } from '@/lib/utils.ts';
 import type { Urls } from '@/types/url.ts';
 
 export default function Home() {
-  const { user, isLoading: isUserLoading } = useUser();
+  const { user, token, isLoading: isUserLoading } = useUser();
+  const params = { limit: '2' };
 
   const {
     data: urls,
     error,
     isLoading,
-  } = useSWR(user ? [`${API_URL}/url`, { limit: '2' }] : null, ([url, arg]) =>
-    getUrls(url, arg)
+  } = useSWR(
+    user ? [`${API_URL}/url`, { params, token }] : null,
+    ([url, arg]) => getUrls(url, arg)
   );
 
   if (isUserLoading) {
@@ -52,7 +54,7 @@ export default function Home() {
           gap="4"
         >
           <Heading>Shorten URL</Heading>
-          <UrlForm />
+          <UrlForm token={token} />
         </Stack>
         <Stack
           align="center"
@@ -73,15 +75,13 @@ export default function Home() {
   );
 }
 
-function UrlForm() {
+function UrlForm({ token }: { token: string | null | undefined }) {
   const id = useId();
 
-  const {
-    data: _data,
-    error,
-    trigger,
-    isMutating,
-  } = useSWRMutation(`${API_URL}/url`, shortenUrl);
+  const { error, trigger, isMutating } = useSWRMutation(
+    `${API_URL}/url`,
+    shortenUrl
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -89,7 +89,7 @@ function UrlForm() {
     const longUrl = formData.get('long_url') as string;
     const shortUrl = formData.get('short_url') as string;
     await trigger(
-      { long_url: longUrl, short_url: shortUrl },
+      { token, long_url: longUrl, short_url: shortUrl },
       {
         onSuccess: () => {
           mutate((key) => Array.isArray(key) && key[0] === `${API_URL}/url`);

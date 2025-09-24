@@ -37,7 +37,7 @@
                   "kind": "objectLiteralMember",
                   "scope": "any"
                 },
-                "formats": ["camelCase", "snake_case"]
+                "formats": ["camelCase", "snake_case", "PascalCase"]
               }
             ],
             "strictCase": false
