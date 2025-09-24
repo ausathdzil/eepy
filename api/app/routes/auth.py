@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
 from app.config import settings
@@ -51,7 +51,7 @@ def login_user(
         value=access_token,
         httponly=True,
         secure=settings.ENVIRONMENT != "local",
-        expires=access_token_expires.total_seconds(),
+        expires=datetime.now(timezone.utc) + access_token_expires,
         samesite="lax",
         path="/",
     )
@@ -82,7 +82,7 @@ def register_user(session: SessionDep, user_in: UserCreate, response: Response):
     response.set_cookie(
         key="access_token",
         value=access_token,
-        expires=access_token_expires.total_seconds(),
+        expires=datetime.now(timezone.utc) + access_token_expires,
         secure=settings.ENVIRONMENT != "local",
         httponly=True,
     )

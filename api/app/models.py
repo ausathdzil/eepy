@@ -13,7 +13,7 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=255)
 
 
-class UserUpdate(UserBase):
+class UserUpdate(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
     email: EmailStr | None = Field(default=None, max_length=255)
 
@@ -29,7 +29,9 @@ class User(UserBase, table=True):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-    url: list["Url"] = Relationship(back_populates="user", cascade_delete=True)
+    url: list["Url"] = Relationship(
+        back_populates="user", cascade_delete=True
+    )  # pyright: ignore[reportAny]
 
 
 class UserPublic(UserBase):
@@ -44,7 +46,7 @@ class UrlBase(SQLModel):
 
 
 class UrlCreate(UrlBase):
-    long_url: HttpUrl
+    long_url: HttpUrl  # pyright: ignore[reportIncompatibleVariableOverride]
 
 
 class Url(UrlBase, table=True):
@@ -55,12 +57,11 @@ class Url(UrlBase, table=True):
     )
 
     user_id: int | None = Field(default=None, foreign_key="user.id")
-    user: User | None = Relationship(back_populates="url")
+    user: User | None = Relationship(back_populates="url")  # pyright: ignore[reportAny]
 
 
 class UrlPublic(UrlBase):
     id: int
-    short_url: str
     created_at: datetime
     expires_at: datetime
 
@@ -79,3 +80,7 @@ class UrlsPublic(SQLModel):
 class Token(SQLModel):
     access_token: str
     token_type: str
+
+
+class TokenPayload(SQLModel):
+    sub: str | None = None

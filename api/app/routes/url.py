@@ -2,10 +2,10 @@ import math
 from typing import Annotated
 
 from app.deps import CurrentUser, SessionDep
-from app.models import Url, UrlCreate, UrlsPublic
+from app.models import Url, UrlCreate, UrlPublic, UrlsPublic
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import RedirectResponse
-from sqlmodel import func, select, text
+from sqlmodel import col, func, select, text
 
 router = APIRouter(prefix="/url", tags=["url"])
 
@@ -19,7 +19,7 @@ def base62_encode(num: int) -> str:
     return hash_str
 
 
-@router.post("/")
+@router.post("/", response_model=UrlPublic)
 def shorten_url(url_in: UrlCreate, session: SessionDep, current_user: CurrentUser):
     url = Url.model_validate(url_in, update={"user_id": current_user.id})
     if url.short_url:
@@ -29,7 +29,7 @@ def shorten_url(url_in: UrlCreate, session: SessionDep, current_user: CurrentUse
 
     session.add(url)
     session.flush()
-    if not url.short_url:
+    if not url.short_url and url.id:
         url.short_url = base62_encode(url.id)
 
     try:
@@ -59,9 +59,9 @@ def read_urls(
         )
 
     if order == "desc":
-        data_statement = base_statement.order_by(Url.created_at.desc())
+        data_statement = base_statement.order_by(col(Url.created_at).desc())
     else:
-        data_statement = base_statement.order_by(Url.created_at.asc())
+        data_statement = base_statement.order_by(col(Url.created_at).asc())
 
     count_statement = select(func.count()).select_from(base_statement.subquery())
     count = session.exec(count_statement).one()
@@ -75,8 +75,10 @@ def read_urls(
     data_statement = data_statement.offset(offset).limit(limit)
     urls = session.exec(data_statement).all()
 
+    data = [UrlPublic.model_validate(url) for url in urls]
+
     return UrlsPublic(
-        data=urls,
+        data=data,
         count=count,
         page=page,
         total_pages=total_pages,
