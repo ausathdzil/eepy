@@ -7,7 +7,7 @@ import { Input } from './ui/input.tsx';
 
 const DEBOUNCE_DELAY = 500;
 
-export function Search({ placeholder }: { placeholder: string }) {
+export function SearchInput({ placeholder }: { placeholder: string }) {
   const id = useId();
   const [searchParams, setSearchParams] = useSearchParams();
 

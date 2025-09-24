@@ -10,9 +10,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../card/Card.tsx';
-import { Stack } from '../containers/Containers.tsx';
-import { Link } from '../link/Link.tsx';
+} from './card/Card.tsx';
+import { Stack } from './containers/Containers.tsx';
+import { Link } from './link/Link.tsx';
 
 export function UrlCard({
   url,

@@ -10,18 +10,7 @@ export default defineConfig({
     rolldownOptions: {
       output: {
         advancedChunks: {
-          groups: [
-            { name: 'lucide-react', test: '/node_modules[\\/]lucide-react/' },
-            { name: 'radix-ui', test: '/node_modules[\\/]@radix-ui/' },
-            { name: 'react', test: '/node_modules[\\/]react/' },
-            { name: 'react-dom', test: '/node_modules[\\/]react-dom/' },
-            { name: 'react-router', test: '/node_modules[\\/]react-router/' },
-            { name: 'swr', test: '/node_modules[\\/]swr/' },
-            {
-              name: 'tailwind-merge',
-              test: '/node_modules[\\/]tailwind-merge/',
-            },
-          ],
+          groups: [{ name: 'react', test: /node_modules[\\/]react/ }],
         },
       },
     },

@@ -3,12 +3,19 @@ import { useNavigate, useSearchParams } from 'react-router';
 import useSWR from 'swr';
 
 import { MainContainer } from '@/components/containers/Containers.tsx';
-import { Search } from '@/components/Search.tsx';
+import {
+  Pagination,
+  PaginationButtons,
+  PaginationData,
+} from '@/components/pagination/Pagination.tsx';
+import { SearchInput } from '@/components/SearchInput.tsx';
+import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
 import { Title } from '@/components/typography/Typography.tsx';
-import { UserUrls } from '@/components/url/UserUrls.tsx';
+import { UrlCard } from '@/components/UrlCard.tsx';
 import { useUser } from '@/hooks/useUser.ts';
 import { getUrls } from '@/lib/data/url.ts';
 import { API_URL } from '@/lib/utils.ts';
+import type { Urls } from '@/types/url.ts';
 
 export default function Profile() {
   const { user, isLoading } = useUser();
@@ -39,8 +46,60 @@ export default function Profile() {
   return (
     <MainContainer>
       <Title>My URLs</Title>
-      {urls && urls.data.length > 0 && <Search placeholder="Search URLs..." />}
+      {urls && urls.data.length > 0 && (
+        <SearchInput placeholder="Search URLs..." />
+      )}
       <UserUrls error={error} isLoading={isUrlsLoading} urls={urls} />
     </MainContainer>
+  );
+}
+
+function UserUrls({
+  urls,
+  error,
+  isLoading,
+}: {
+  urls: Urls | undefined;
+  error: Error | null;
+  isLoading: boolean;
+}) {
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 place-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full max-w-md" />
+      </div>
+    );
+  }
+
+  if (!urls || urls.data.length === 0) {
+    return <div className="text-center">No URLs found</div>;
+  }
+
+  return (
+    <>
+      <div className="grid flex-1 grid-cols-1 place-content-start place-items-center gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {urls.data.map((url) => (
+          <UrlCard className="basis-1/3" key={url.id} url={url} />
+        ))}
+      </div>
+      <Pagination>
+        <PaginationData count={urls.count} />
+        <PaginationButtons
+          hasNext={urls.has_next}
+          hasPrevious={urls.has_previous}
+          page={urls.page}
+          totalPages={urls.total_pages}
+        />
+      </Pagination>
+    </>
   );
 }
