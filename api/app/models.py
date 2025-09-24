@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
-from pydantic import EmailStr
+from pydantic import EmailStr, HttpUrl
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -39,12 +39,12 @@ class UserPublic(UserBase):
 
 
 class UrlBase(SQLModel):
-    long_url: str = Field(index=True)
+    long_url: str = Field(index=True, nullable=False)
     short_url: str | None = Field(default=None, index=True, unique=True)
 
 
 class UrlCreate(UrlBase):
-    pass
+    long_url: HttpUrl
 
 
 class Url(UrlBase, table=True):
