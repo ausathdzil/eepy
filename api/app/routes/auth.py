@@ -113,7 +113,9 @@ def logout_user(response: Response):
 
 
 @router.post("/refresh", response_model=Token)
-def refresh_access_token(refresh_token: Annotated[str | None, Cookie()] = None):
+def refresh_access_token(
+    refresh_token: Annotated[str | None, Cookie()] = None, response: Response = None
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -130,6 +132,12 @@ def refresh_access_token(refresh_token: Annotated[str | None, Cookie()] = None):
         if token_payload.type != "refresh":
             raise credentials_exception
     except (InvalidTokenError, ValidationError):
+        response.delete_cookie(
+            key="refresh_token",
+            httponly=True,
+            secure=settings.ENVIRONMENT != "local",
+            path="/",
+        )
         raise credentials_exception
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRES_MINUTES)
