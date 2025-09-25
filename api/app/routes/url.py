@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import math
 from typing import Annotated
 
@@ -5,7 +6,7 @@ from app.deps import CurrentUser, SessionDep
 from app.models import Url, UrlCreate, UrlPublic, UrlsPublic
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import RedirectResponse
-from sqlmodel import col, func, select, text
+from sqlmodel import col, func, or_, select, text
 
 router = APIRouter(prefix="/url", tags=["url"])
 
@@ -55,7 +56,7 @@ def read_urls(
 
     if q:
         base_statement = base_statement.where(
-            text("(long_url LIKE :q OR short_url LIKE :q)").bindparams(q=f"%{q}%")
+            or_(col(Url.long_url).like(f"%{q}%"), col(Url.short_url).like(f"%{q}%"))
         )
 
     if order == "desc":
@@ -66,7 +67,7 @@ def read_urls(
     count_statement = select(func.count()).select_from(base_statement.subquery())
     count = session.exec(count_statement).one()
 
-    total_pages = math.ceil(count / limit) if count > 0 else 0
+    total_pages = (count + limit - 1) // limit
     has_next = page < total_pages
     has_previous = page > 1
 
@@ -93,6 +94,8 @@ def redirect_url(short_url: str, session: SessionDep):
     url = session.exec(statement).first()
     if not url:
         raise HTTPException(status_code=404, detail="URL not found")
+    if url.expires_at < datetime.now(timezone.utc):
+        raise HTTPException(status_code=410, detail="URL has expired")
     return RedirectResponse(status_code=302, url=url.long_url)
 
 
