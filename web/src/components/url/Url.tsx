@@ -10,9 +10,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from './card/Card.tsx';
-import { Stack } from './containers/Containers.tsx';
-import { Link } from './link/Link.tsx';
+} from '../card/Card.tsx';
+import { Stack } from '../containers/Containers.tsx';
+import { Link } from '../link/Link.tsx';
+import styles from './url.module.css';
+
+export function UrlContainer({ className, ...props }: ComponentProps<'div'>) {
+  return <div className={cn(styles.urlContainer, className)} {...props} />;
+}
 
 export function UrlCard({
   url,

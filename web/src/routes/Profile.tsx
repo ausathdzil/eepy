@@ -11,7 +11,7 @@ import {
 import { SearchInput } from '@/components/SearchInput.tsx';
 import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
 import { Title } from '@/components/typography/Typography.tsx';
-import { UrlCard } from '@/components/UrlCard.tsx';
+import { UrlCard, UrlContainer } from '@/components/url/Url.tsx';
 import { useUser } from '@/hooks/useUser.ts';
 import { getUrls } from '@/lib/data/url.ts';
 import { API_URL } from '@/lib/utils.ts';
@@ -67,19 +67,19 @@ function UserUrls({
   isLoading: boolean;
 }) {
   if (error) {
-    return <div>{error.message}</div>;
+    return <div className="text-destructive">{error.message}</div>;
   }
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 place-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <UrlContainer>
         <Skeleton className="h-42 w-full" />
         <Skeleton className="h-42 w-full" />
         <Skeleton className="h-42 w-full" />
         <Skeleton className="h-42 w-full" />
         <Skeleton className="h-42 w-full" />
         <Skeleton className="h-42 w-full" />
-      </div>
+      </UrlContainer>
     );
   }
 
@@ -89,11 +89,11 @@ function UserUrls({
 
   return (
     <>
-      <div className="grid flex-1 grid-cols-1 place-content-start place-items-center gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <UrlContainer>
         {urls.data.map((url) => (
           <UrlCard key={url.id} url={url} />
         ))}
-      </div>
+      </UrlContainer>
       <Pagination>
         <PaginationData count={urls.count} />
         <PaginationButtons

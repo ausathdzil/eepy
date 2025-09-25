@@ -9,10 +9,10 @@ import { MainContainer, Stack } from '@/components/containers/Containers.tsx';
 import { Link } from '@/components/link/Link.tsx';
 import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
 import { Heading } from '@/components/typography/Typography.tsx';
-import { UrlCard } from '@/components/UrlCard.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
+import { UrlCard } from '@/components/url/Url.tsx';
 import { useUser } from '@/hooks/useUser.ts';
 import { shortenUrl } from '@/lib/actions/url.ts';
 import { getUrls } from '@/lib/data/url.ts';
@@ -157,8 +157,8 @@ function RecentUrls({
   if (isLoading) {
     return (
       <Stack align="center" className="w-full" gap="8">
-        <Skeleton className="h-42 w-full max-w-md" />
-        <Skeleton className="h-42 w-full max-w-md" />
+        <Skeleton className="h-42 w-full" />
+        <Skeleton className="h-42 w-full" />
       </Stack>
     );
   }
