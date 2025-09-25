@@ -72,8 +72,12 @@ function LogoutButton() {
     await trigger(null, {
       onSuccess: () => {
         setAccessToken(null);
-        mutate(() => true);
-        navigate('/auth/login');
+        mutate(
+          (key) => Array.isArray(key) && key[0] === `${API_URL}/users/me`,
+          null,
+          { revalidate: false }
+        );
+        navigate('/auth/login', { replace: true });
       },
     });
   };
