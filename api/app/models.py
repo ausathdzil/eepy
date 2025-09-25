@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
-from pydantic import EmailStr, HttpUrl
+from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
 

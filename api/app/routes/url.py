@@ -1,12 +1,11 @@
 from datetime import datetime, timezone
-import math
 from typing import Annotated
 
 from app.deps import CurrentUser, SessionDep
 from app.models import Url, UrlCreate, UrlPublic, UrlsPublic
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import RedirectResponse
-from sqlmodel import col, func, or_, select, text
+from sqlmodel import col, func, or_, select
 
 router = APIRouter(prefix="/url", tags=["url"])
 
