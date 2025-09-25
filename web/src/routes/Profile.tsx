@@ -41,18 +41,31 @@ export default function Profile() {
     isLoading: isUrlsLoading,
   } = useSWR(
     user ? [`${API_URL}/url`, { params, token }] : null,
-    ([url, arg]) => getUrls(url, arg)
+    ([url, arg]) => getUrls(url, arg),
+    { keepPreviousData: true }
   );
+
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const totalPages = urls?.total_pages || 0;
+  const hasNext = currentPage < totalPages;
+  const hasPrevious = currentPage > 1;
 
   return (
     <MainContainer>
       <Title>My URLs</Title>
-      {isLoading ? (
-        <Skeleton className="h-9 w-full" />
-      ) : (
-        <SearchInput placeholder="Search URLs..." />
-      )}
+      <SearchInput placeholder="Search URLs..." />
       <UserUrls error={error} isLoading={isUrlsLoading} urls={urls} />
+      {urls && (
+        <Pagination>
+          <PaginationData count={urls.count || 0} />
+          <PaginationButtons
+            hasNext={hasNext}
+            hasPrevious={hasPrevious}
+            page={currentPage}
+            totalPages={totalPages}
+          />
+        </Pagination>
+      )}
     </MainContainer>
   );
 }
@@ -67,10 +80,10 @@ function UserUrls({
   isLoading: boolean;
 }) {
   if (error) {
-    return <div className="text-destructive">{error.message}</div>;
+    return <div className="flex-1 text-destructive">{error.message}</div>;
   }
 
-  if (isLoading) {
+  if (isLoading || !urls) {
     return (
       <UrlContainer>
         <Skeleton className="h-42 w-full" />
@@ -83,26 +96,15 @@ function UserUrls({
     );
   }
 
-  if (!urls || urls.data.length === 0) {
-    return <div className="text-center">No URLs found</div>;
+  if (urls.data.length === 0) {
+    return <div className="flex-1 text-center">No URLs found</div>;
   }
 
   return (
-    <>
-      <UrlContainer>
-        {urls.data.map((url) => (
-          <UrlCard key={url.id} url={url} />
-        ))}
-      </UrlContainer>
-      <Pagination>
-        <PaginationData count={urls.count} />
-        <PaginationButtons
-          hasNext={urls.has_next}
-          hasPrevious={urls.has_previous}
-          page={urls.page}
-          totalPages={urls.total_pages}
-        />
-      </Pagination>
-    </>
+    <UrlContainer>
+      {urls.data.map((url) => (
+        <UrlCard key={url.id} url={url} />
+      ))}
+    </UrlContainer>
   );
 }
