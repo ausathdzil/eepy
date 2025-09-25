@@ -1,9 +1,8 @@
 {
-  "lsp": {
-    "biome": {
-      "settings": {
-        "config_path": "web/biome.jsonc"
-      }
-    }
+  "biome.lsp.bin": "./web/node_modules/@biomejs/cli-win32-x64/biome.exe",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
   }
 }
