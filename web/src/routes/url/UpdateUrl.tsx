@@ -3,18 +3,18 @@ import { useParams } from 'react-router';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { Card, CardContent, CardFooter } from '@/components/card/Card';
+import { Card, CardContent, CardFooter } from '@/components/card/Card.tsx';
 import { MainContainer, Stack } from '@/components/containers/Containers.tsx';
-import { Skeleton } from '@/components/skeleton/Skeleton';
-import { Title } from '@/components/typography/Typography';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
+import { Title } from '@/components/typography/Typography.tsx';
+import { Button } from '@/components/ui/button.tsx';
+import { Input } from '@/components/ui/input.tsx';
+import { Label } from '@/components/ui/label.tsx';
 import { useUser } from '@/hooks/useUser.ts';
-import { updateUrl } from '@/lib/actions/url';
+import { updateUrl } from '@/lib/actions/url.tsx';
 import { getUrl } from '@/lib/data/url.ts';
 import { API_URL, BASE_URL } from '@/lib/utils.ts';
-import type { Url } from '@/types/url';
+import type { Url } from '@/types/url.ts';
 
 const UrlCard = lazy(() => import('@/components/url/UrlCard.tsx'));
 
