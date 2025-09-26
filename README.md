@@ -11,7 +11,8 @@ A simple URL shortener made with React and FastAPI.
 3. TypeScript
 4. React Router
 5. SWR
-6. shadcn/ui
+6. Zustand
+7. shadcn/ui
 
 ### Backend
 

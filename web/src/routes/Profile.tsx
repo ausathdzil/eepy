@@ -1,5 +1,5 @@
-import { lazy, Suspense, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { lazy, Suspense } from 'react';
+import { useSearchParams } from 'react-router';
 import useSWR from 'swr';
 
 import { MainContainer } from '@/components/containers/Containers.tsx';
@@ -20,16 +20,9 @@ import type { Urls } from '@/types/url.ts';
 const UrlCard = lazy(() => import('@/components/url/UrlCard.tsx'));
 
 export default function Profile() {
-  const { user, token, isLoading } = useUser();
-  const navigate = useNavigate();
+  const { user, token } = useUser();
 
   const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    if (!(isLoading || user)) {
-      navigate('/auth/login');
-    }
-  }, [user, isLoading, navigate]);
 
   const query = searchParams.get('q') || '';
   const page = searchParams.get('page') || '1';

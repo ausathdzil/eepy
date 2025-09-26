@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 
 import { AppLayout } from './components/layout/AppLayout.tsx';
 import { AuthLayout } from './components/layout/AuthLayout.tsx';
+import { ProtectedLayout } from './components/layout/ProtectedLayout.tsx';
 import { UserProvider } from './components/UserProvider.tsx';
 
 const HomePage = lazy(() => import('./routes/Home.tsx'));
@@ -28,9 +29,11 @@ export default function App() {
           <Routes>
             <Route element={<AppLayout />}>
               <Route element={<HomePage />} index />
-              <Route element={<ProfilePage />} path="profile" />
-              <Route path="url">
-                <Route element={<UpdateUrlPage />} path=":url_id/update" />
+              <Route element={<ProtectedLayout />}>
+                <Route element={<ProfilePage />} path="profile" />
+                <Route path="url">
+                  <Route element={<UpdateUrlPage />} path=":url_id/update" />
+                </Route>
               </Route>
             </Route>
             <Route element={<AuthLayout />} path="auth">

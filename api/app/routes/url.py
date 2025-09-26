@@ -87,15 +87,14 @@ def read_urls(
     )
 
 
-@router.get("/{short_url}")
-def redirect_url(session: SessionDep, short_url: str):
-    statement = select(Url).where(Url.short_url == short_url)
-    url = session.exec(statement).first()
+@router.get("/{url_id}", response_model=UrlPublic)
+def read_url(session: SessionDep, current_user: CurrentUser, url_id: int):
+    url = session.get(Url, url_id)
     if not url:
         raise HTTPException(status_code=404, detail="URL not found")
-    if url.expires_at < datetime.now(timezone.utc):
-        raise HTTPException(status_code=410, detail="URL has expired")
-    return RedirectResponse(status_code=302, url=url.long_url)
+    if url.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    return url
 
 
 @router.patch("/{url_id}", response_model=UrlPublic)
@@ -107,6 +106,11 @@ def update_url(
         raise HTTPException(status_code=404, detail="URL not found")
     if url.user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized")
+    if url_in.short_url:
+        existing_url = session.get(Url, url_in.short_url)
+        if existing_url is not None:
+            raise HTTPException(status_code=400, detail="Short URL already exists")
+
     url_data = url_in.model_dump(exclude_unset=True)
     _ = url.sqlmodel_update(url_data)
     session.add(url)
@@ -122,6 +126,23 @@ def delete_url(session: SessionDep, current_user: CurrentUser, url_id: int):
         raise HTTPException(status_code=404, detail="URL not found")
     if url.user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized")
+
     session.delete(url)
     session.commit()
     return {"ok": True}
+
+
+@router.get("/r/{short_url}")
+def redirect_url(session: SessionDep, short_url: str):
+    statement = select(Url).where(Url.short_url == short_url)
+    url = session.exec(statement).first()
+    if not url:
+        raise HTTPException(status_code=404, detail="URL not found")
+
+    expires_at = url.expires_at
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    if expires_at < datetime.now(timezone.utc):
+        raise HTTPException(status_code=410, detail="URL has expired")
+
+    return RedirectResponse(status_code=302, url=url.long_url)

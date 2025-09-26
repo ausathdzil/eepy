@@ -16,6 +16,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       onSuccess: (result) => {
         setAccessToken(result.token);
       },
+      dedupingInterval: 2000,
     }
   );
 
