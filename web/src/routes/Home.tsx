@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from 'lucide-react';
 
-import { useId } from 'react';
+import { lazy, Suspense, useId } from 'react';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
@@ -12,12 +12,13 @@ import { Heading } from '@/components/typography/Typography.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
-import { UrlCard } from '@/components/url/Url.tsx';
 import { useUser } from '@/hooks/useUser.ts';
 import { shortenUrl } from '@/lib/actions/url.ts';
 import { getUrls } from '@/lib/data/url.ts';
 import { API_URL, BASE_URL } from '@/lib/utils.ts';
 import type { Urls } from '@/types/url.ts';
+
+const UrlCard = lazy(() => import('@/components/url/UrlCard.tsx'));
 
 export default function Home() {
   const { user, token, isLoading: isUserLoading } = useUser();
@@ -170,7 +171,9 @@ function RecentUrls({
   return (
     <Stack align="center" className="w-full" gap="8">
       {urls.data.map((url) => (
-        <UrlCard key={url.id} url={url} />
+        <Suspense fallback={<Skeleton className="h-42 w-full" />} key={url.id}>
+          <UrlCard url={url} />
+        </Suspense>
       ))}
     </Stack>
   );

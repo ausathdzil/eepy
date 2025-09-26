@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import useSWR from 'swr';
 
@@ -11,11 +11,13 @@ import {
 import { SearchInput } from '@/components/SearchInput.tsx';
 import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
 import { Title } from '@/components/typography/Typography.tsx';
-import { UrlCard, UrlContainer } from '@/components/url/Url.tsx';
+import { UrlContainer } from '@/components/url/UrlContainer.tsx';
 import { useUser } from '@/hooks/useUser.ts';
 import { getUrls } from '@/lib/data/url.ts';
 import { API_URL } from '@/lib/utils.ts';
 import type { Urls } from '@/types/url.ts';
+
+const UrlCard = lazy(() => import('@/components/url/UrlCard.tsx'));
 
 export default function Profile() {
   const { user, token, isLoading } = useUser();
@@ -103,7 +105,9 @@ function UserUrls({
   return (
     <UrlContainer>
       {urls.data.map((url) => (
-        <UrlCard key={url.id} url={url} />
+        <Suspense fallback={<Skeleton className="h-42 w-full" />} key={url.id}>
+          <UrlCard url={url} />
+        </Suspense>
       ))}
     </UrlContainer>
   );

@@ -43,13 +43,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu.tsx';
-import styles from './url.module.css';
 
-export function UrlContainer({ className, ...props }: ComponentProps<'div'>) {
-  return <div className={cn(styles.urlContainer, className)} {...props} />;
-}
-
-export function UrlCard({
+export default function UrlCard({
   url,
   className,
   ...props
