@@ -106,7 +106,7 @@ function UserUrls({
     <UrlContainer>
       {urls.data.map((url) => (
         <Suspense fallback={<Skeleton className="h-42 w-full" />} key={url.id}>
-          <UrlCard url={url} />
+          <UrlCard showAction url={url} />
         </Suspense>
       ))}
     </UrlContainer>

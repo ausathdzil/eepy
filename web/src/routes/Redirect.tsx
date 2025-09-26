@@ -8,7 +8,7 @@ import { API_URL } from '@/lib/utils.ts';
 export default function RedirectUrl() {
   const { short_url } = useParams();
 
-  window.location.href = `${API_URL}/url/${short_url}`;
+  window.location.href = `${API_URL}/url/r/${short_url}`;
 
   return (
     <Stack

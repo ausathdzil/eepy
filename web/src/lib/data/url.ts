@@ -1,4 +1,4 @@
-import type { Urls } from '@/types/url.ts';
+import type { Url, Urls } from '@/types/url.ts';
 
 type GetUrlParams = {
   q: string;
@@ -34,6 +34,29 @@ export async function getUrls(
   }
 
   const res = await fetch(`${url}?${searchParams.toString()}`, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(
+      data.detail[0].msg || data.detail || 'Failed to fetch active URLs'
+    );
+  }
+
+  return data;
+}
+
+export async function getUrl(
+  url: RequestInfo | URL,
+  token: string | null | undefined
+): Promise<Url> {
+  const res = await fetch(url, {
     method: 'GET',
     headers: {
       accept: 'application/json',

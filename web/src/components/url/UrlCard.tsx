@@ -46,9 +46,13 @@ import {
 
 export default function UrlCard({
   url,
+  showAction,
   className,
   ...props
-}: { url: Url } & ComponentProps<'div'>) {
+}: {
+  url: Url;
+  showAction: boolean;
+} & ComponentProps<'div'>) {
   return (
     <Card
       className={cn('@container/card w-full', className)}
@@ -68,7 +72,7 @@ export default function UrlCard({
             </a>
           </CardDescription>
         </Stack>
-        <UrlAction url={url} />
+        {showAction && <UrlAction url={url} />}
       </CardHeader>
       <CardFooter>
         <Stack className="text-muted-foreground text-xs sm:text-sm" gap="2">
@@ -126,7 +130,7 @@ function UrlAction({ url }: { url: Url }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem asChild>
-              <Link target="_blank" to={`/u/${url.short_url}`}>
+              <Link target="_blank" to={`/r/${url.short_url}`}>
                 <ExternalLinkIcon />
                 Visit
               </Link>

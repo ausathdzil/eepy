@@ -55,7 +55,7 @@ export default function Home() {
           gap="4"
         >
           <Heading>Shorten URL</Heading>
-          <UrlForm token={token} />
+          <ShortenUrlForm token={token} />
         </Stack>
         <Stack
           align="center"
@@ -76,7 +76,7 @@ export default function Home() {
   );
 }
 
-function UrlForm({ token }: { token: string | null | undefined }) {
+function ShortenUrlForm({ token }: { token: string | null | undefined }) {
   const id = useId();
 
   const { error, trigger, isMutating } = useSWRMutation(
@@ -142,20 +142,18 @@ function UrlForm({ token }: { token: string | null | undefined }) {
   );
 }
 
-function RecentUrls({
-  urls,
-  error,
-  isLoading,
-}: {
+type RecentUrlsProps = {
   urls: Urls | undefined;
   error: Error | null;
   isLoading: boolean;
-}) {
+};
+
+function RecentUrls({ urls, error, isLoading }: RecentUrlsProps) {
   if (error) {
     return <div>{error.message}</div>;
   }
 
-  if (isLoading) {
+  if (isLoading || !urls) {
     return (
       <Stack align="center" className="w-full" gap="8">
         <Skeleton className="h-42 w-full" />
@@ -164,7 +162,7 @@ function RecentUrls({
     );
   }
 
-  if (!urls || urls.data.length === 0) {
+  if (urls.data.length === 0) {
     return <div>Create your first URL!</div>;
   }
 
@@ -172,7 +170,7 @@ function RecentUrls({
     <Stack align="center" className="w-full" gap="8">
       {urls.data.map((url) => (
         <Suspense fallback={<Skeleton className="h-42 w-full" />} key={url.id}>
-          <UrlCard url={url} />
+          <UrlCard showAction={false} url={url} />
         </Suspense>
       ))}
     </Stack>

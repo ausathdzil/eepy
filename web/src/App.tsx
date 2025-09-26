@@ -30,14 +30,14 @@ export default function App() {
               <Route element={<HomePage />} index />
               <Route element={<ProfilePage />} path="profile" />
               <Route path="url">
-                <Route element={<UpdateUrlPage />} path=":id/update" />
+                <Route element={<UpdateUrlPage />} path=":url_id/update" />
               </Route>
             </Route>
             <Route element={<AuthLayout />} path="auth">
               <Route element={<LoginPage />} path="login" />
               <Route element={<RegisterPage />} path="register" />
             </Route>
-            <Route element={<RedirectUrl />} path="u/:short_url" />
+            <Route element={<RedirectUrl />} path="r/:short_url" />
           </Routes>
         </UserProvider>
       </Suspense>
