@@ -1,7 +1,20 @@
-import { ClockAlertIcon, ClockPlusIcon } from 'lucide-react';
-import type { ComponentProps } from 'react';
+import {
+  ClockAlertIcon,
+  ClockPlusIcon,
+  EditIcon,
+  ExternalLinkIcon,
+  MoreHorizontalIcon,
+  Trash2Icon,
+} from 'lucide-react';
 
-import { BASE_URL, cn, formatDate } from '@/lib/utils.ts';
+import type { ComponentProps } from 'react';
+import { Link } from 'react-router';
+import { mutate } from 'swr';
+import useSWRMutation from 'swr/mutation';
+
+import { useUser } from '@/hooks/useUser.ts';
+import { deleteUrl } from '@/lib/actions/url.ts';
+import { API_URL, BASE_URL, cn, formatDate } from '@/lib/utils.ts';
 import type { Url } from '@/types/url.ts';
 import {
   Card,
@@ -12,7 +25,24 @@ import {
   CardTitle,
 } from '../card/Card.tsx';
 import { Stack } from '../containers/Containers.tsx';
-import { Link } from '../link/Link.tsx';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '../ui/alert-dialog.tsx';
+import { Button } from '../ui/button.tsx';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu.tsx';
 import styles from './url.module.css';
 
 export function UrlContainer({ className, ...props }: ComponentProps<'div'>) {
@@ -43,15 +73,7 @@ export function UrlCard({
             </a>
           </CardDescription>
         </Stack>
-        <CardAction className="@sm/card:block hidden">
-          <Link
-            href={`/u/${url.short_url}`}
-            target="_blank"
-            variant="secondary"
-          >
-            Visit
-          </Link>
-        </CardAction>
+        <UrlAction url={url} />
       </CardHeader>
       <CardFooter>
         <Stack className="text-muted-foreground text-xs sm:text-sm" gap="2">
@@ -76,5 +98,77 @@ export function UrlCard({
         </Stack>
       </CardFooter>
     </Card>
+  );
+}
+
+function UrlAction({ url }: { url: Url }) {
+  const { token } = useUser();
+  const {
+    error: _error,
+    trigger,
+    isMutating,
+  } = useSWRMutation(`${API_URL}/url/${url.id}`, deleteUrl);
+
+  const handleDeleteUrl = async () => {
+    await trigger(
+      { token },
+      {
+        onSuccess: () => {
+          mutate((key) => Array.isArray(key) && key[0] === `${API_URL}/url`);
+        },
+      }
+    );
+  };
+
+  return (
+    <CardAction>
+      <AlertDialog>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="icon" variant="secondary">
+              <MoreHorizontalIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem asChild>
+              <Link target="_blank" to={`/u/${url.short_url}`}>
+                <ExternalLinkIcon />
+                Visit
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to={`/url/${url.id}/update`}>
+                <EditIcon />
+                Update
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <AlertDialogTrigger className="w-full">
+                <Trash2Icon />
+                Delete
+              </AlertDialogTrigger>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete URL</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isMutating}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={isMutating}
+              onClick={handleDeleteUrl}
+              variant="destructive"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </CardAction>
   );
 }

@@ -1,3 +1,5 @@
+import { LoaderIcon } from 'lucide-react';
+
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router';
 
@@ -7,25 +9,35 @@ import { UserProvider } from './components/UserProvider.tsx';
 
 const HomePage = lazy(() => import('./routes/Home.tsx'));
 const ProfilePage = lazy(() => import('./routes/Profile.tsx'));
-const UrlPage = lazy(() => import('./routes/Url.tsx'));
+const UpdateUrlPage = lazy(() => import('./routes/url/UpdateUrl.tsx'));
 const LoginPage = lazy(() => import('./routes/auth/Login.tsx'));
 const RegisterPage = lazy(() => import('./routes/auth/Register.tsx'));
+const RedirectUrl = lazy(() => import('./routes/Redirect.tsx'));
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={null}>
+      <Suspense
+        fallback={
+          <div className="grid flex-1 place-content-center">
+            <LoaderIcon className="animate-spin" />
+          </div>
+        }
+      >
         <UserProvider>
           <Routes>
             <Route element={<AppLayout />}>
               <Route element={<HomePage />} index />
               <Route element={<ProfilePage />} path="profile" />
+              <Route path="url">
+                <Route element={<UpdateUrlPage />} path=":id/update" />
+              </Route>
             </Route>
-            <Route element={<UrlPage />} path="u/:short_url" />
             <Route element={<AuthLayout />} path="auth">
               <Route element={<LoginPage />} path="login" />
               <Route element={<RegisterPage />} path="register" />
             </Route>
+            <Route element={<RedirectUrl />} path="u/:short_url" />
           </Routes>
         </UserProvider>
       </Suspense>

@@ -1,5 +1,11 @@
 node_modules
+dist
+
 .git
 .gitignore
 *.md
-dist
+
+.cursor
+.husky
+.vscode
+.zed

@@ -47,6 +47,10 @@ class UrlCreate(UrlBase):
     pass
 
 
+class UrlUpdate(UrlBase):
+    long_url: str | None = Field(default=None)  # pyright: ignore[reportIncompatibleVariableOverride]
+
+
 class Url(UrlBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import Annotated
 
 from app.deps import CurrentUser, SessionDep
-from app.models import Url, UrlCreate, UrlPublic, UrlsPublic
+from app.models import Url, UrlCreate, UrlPublic, UrlUpdate, UrlsPublic
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import RedirectResponse
 from sqlmodel import col, func, or_, select
@@ -88,7 +88,7 @@ def read_urls(
 
 
 @router.get("/{short_url}")
-def redirect_url(short_url: str, session: SessionDep):
+def redirect_url(session: SessionDep, short_url: str):
     statement = select(Url).where(Url.short_url == short_url)
     url = session.exec(statement).first()
     if not url:
@@ -98,11 +98,30 @@ def redirect_url(short_url: str, session: SessionDep):
     return RedirectResponse(status_code=302, url=url.long_url)
 
 
-@router.delete("/{url_id}")
-def delete_url(url_id: int, session: SessionDep):
+@router.patch("/{url_id}", response_model=UrlPublic)
+def update_url(
+    session: SessionDep, current_user: CurrentUser, url_id: int, url_in: UrlUpdate
+):
     url = session.get(Url, url_id)
     if not url:
         raise HTTPException(status_code=404, detail="URL not found")
+    if url.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    url_data = url_in.model_dump(exclude_unset=True)
+    _ = url.sqlmodel_update(url_data)
+    session.add(url)
+    session.commit()
+    session.refresh(url)
+    return url
+
+
+@router.delete("/{url_id}")
+def delete_url(session: SessionDep, current_user: CurrentUser, url_id: int):
+    url = session.get(Url, url_id)
+    if not url:
+        raise HTTPException(status_code=404, detail="URL not found")
+    if url.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
     session.delete(url)
     session.commit()
     return {"ok": True}

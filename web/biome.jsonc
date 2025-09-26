@@ -2,7 +2,14 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["ultracite"],
   "files": {
-    "includes": ["**", "!node_modules", "!dist", "!build", "!public"]
+    "includes": [
+      "**",
+      "!node_modules",
+      "!dist",
+      "!build",
+      "!public",
+      "!src/components/ui/*"
+    ]
   },
   "linter": {
     "rules": {

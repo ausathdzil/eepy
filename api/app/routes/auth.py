@@ -114,7 +114,7 @@ def logout_user(response: Response):
 
 @router.post("/refresh", response_model=Token)
 def refresh_access_token(
-    refresh_token: Annotated[str | None, Cookie()] = None, response: Response = None
+    response: Response, refresh_token: Annotated[str | None, Cookie()] = None
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
