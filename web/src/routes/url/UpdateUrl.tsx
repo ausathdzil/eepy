@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
 import { useUser } from '@/hooks/useUser.ts';
-import { updateUrl } from '@/lib/actions/url.tsx';
+import { updateUrl } from '@/lib/actions/url.ts';
 import { getUrl } from '@/lib/data/url.ts';
 import { API_URL, BASE_URL } from '@/lib/utils.ts';
 import type { Url } from '@/types/url.ts';
