@@ -16,36 +16,17 @@ def get_password_hash(password: str):
     return pwd_context.hash(password)
 
 
-def create_access_token(
+def create_token(
     data: dict[str, Any],  # pyright: ignore[reportExplicitAny]
-    expires_delta: timedelta | None = None,
+    expires_delta: timedelta,
+    type: str | None = None,
 ):
     to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(
-            minutes=settings.ACCESS_TOKEN_EXPIRES_MINUTES
-        )
+    expire = datetime.now(timezone.utc) + expires_delta
+
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(  # pyright: ignore[reportUnknownMemberType]
-        to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
-    )
-    return encoded_jwt
-
-
-def create_refresh_token(
-    data: dict[str, Any],  # pyright: ignore[reportExplicitAny]
-    expires_delta: timedelta | None = None,
-):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(
-            minutes=settings.REFRESH_TOKEN_EXPIRES_MINUTES
-        )
-    to_encode.update({"exp": expire, "type": "refresh"})
+    if type is not None:
+        to_encode.update({"type": type})
     encoded_jwt = jwt.encode(  # pyright: ignore[reportUnknownMemberType]
         to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
     )

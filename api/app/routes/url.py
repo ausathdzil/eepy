@@ -3,9 +3,9 @@ from typing import Annotated
 
 from app.deps import CurrentUser, SessionDep
 from app.models import Url, UrlCreate, UrlPublic, UrlUpdate, UrlsPublic
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, status
 from fastapi.responses import RedirectResponse
-from sqlmodel import col, func, or_, select
+from sqlmodel import and_, col, func, or_, select
 
 router = APIRouter(prefix="/url", tags=["url"])
 
@@ -19,13 +19,26 @@ def base62_encode(num: int) -> str:
     return hash_str
 
 
+existing_url_exception = HTTPException(
+    status_code=status.HTTP_400_BAD_REQUEST, detail="Short URL already exists"
+)
+
+url_not_found_exception = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND, detail="URL not found"
+)
+
+forbidden_exception = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden"
+)
+
+
 @router.post("/", response_model=UrlPublic)
 def shorten_url(url_in: UrlCreate, session: SessionDep, current_user: CurrentUser):
     url = Url.model_validate(url_in, update={"user_id": current_user.id})
     if url.short_url:
         statement = select(Url).where(Url.short_url == url.short_url)
         if session.exec(statement).first():
-            raise HTTPException(status_code=400, detail="Short URL already exists")
+            raise existing_url_exception
 
     session.add(url)
     session.flush()
@@ -36,7 +49,7 @@ def shorten_url(url_in: UrlCreate, session: SessionDep, current_user: CurrentUse
         session.commit()
     except Exception:
         session.rollback()
-        raise HTTPException(status_code=400, detail="Short URL already exists")
+        raise existing_url_exception
 
     session.refresh(url)
     return url
@@ -91,9 +104,9 @@ def read_urls(
 def read_url(session: SessionDep, current_user: CurrentUser, url_id: int):
     url = session.get(Url, url_id)
     if not url:
-        raise HTTPException(status_code=404, detail="URL not found")
+        raise url_not_found_exception
     if url.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Not authorized")
+        raise forbidden_exception
     return url
 
 
@@ -103,18 +116,26 @@ def update_url(
 ):
     url = session.get(Url, url_id)
     if not url:
-        raise HTTPException(status_code=404, detail="URL not found")
+        raise url_not_found_exception
     if url.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Not authorized")
+        raise forbidden_exception
     if url_in.short_url:
-        existing_url = session.get(Url, url_in.short_url)
-        if existing_url is not None:
-            raise HTTPException(status_code=400, detail="Short URL already exists")
+        statement = select(Url).where(
+            and_(Url.short_url == url_in.short_url, Url.id != url.id)
+        )
+        if session.exec(statement).first():
+            raise existing_url_exception
 
     url_data = url_in.model_dump(exclude_unset=True)
     _ = url.sqlmodel_update(url_data)
     session.add(url)
-    session.commit()
+
+    try:
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise existing_url_exception
+
     session.refresh(url)
     return url
 
@@ -123,9 +144,9 @@ def update_url(
 def delete_url(session: SessionDep, current_user: CurrentUser, url_id: int):
     url = session.get(Url, url_id)
     if not url:
-        raise HTTPException(status_code=404, detail="URL not found")
+        raise url_not_found_exception
     if url.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Not authorized")
+        raise forbidden_exception
 
     session.delete(url)
     session.commit()
@@ -137,12 +158,12 @@ def redirect_url(session: SessionDep, short_url: str):
     statement = select(Url).where(Url.short_url == short_url)
     url = session.exec(statement).first()
     if not url:
-        raise HTTPException(status_code=404, detail="URL not found")
+        raise url_not_found_exception
 
     expires_at = url.expires_at
     if expires_at.tzinfo is None:
         expires_at = expires_at.replace(tzinfo=timezone.utc)
     if expires_at < datetime.now(timezone.utc):
-        raise HTTPException(status_code=410, detail="URL has expired")
+        raise HTTPException(status_code=status.HTTP_410_GONE, detail="URL has expired")
 
-    return RedirectResponse(status_code=302, url=url.long_url)
+    return RedirectResponse(status_code=status.HTTP_302_FOUND, url=url.long_url)

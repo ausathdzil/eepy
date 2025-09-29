@@ -5,12 +5,7 @@ import jwt
 from app.config import settings
 from app.deps import SessionDep
 from app.models import Token, TokenPayload, User, UserCreate
-from app.security import (
-    create_access_token,
-    create_refresh_token,
-    get_password_hash,
-    verify_password,
-)
+from app.security import create_token, get_password_hash, verify_password
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
@@ -50,10 +45,12 @@ def login_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRES_MINUTES)
-    access_token = create_access_token({"sub": user.email}, access_token_expires)
+    access_token = create_token({"sub": user.email}, access_token_expires)
 
     refresh_token_expires = timedelta(minutes=settings.REFRESH_TOKEN_EXPIRES_MINUTES)
-    refresh_token = create_refresh_token({"sub": user.email}, refresh_token_expires)
+    refresh_token = create_token(
+        {"sub": user.email}, refresh_token_expires, type="refresh"
+    )
 
     response.set_cookie(
         key="refresh_token",
@@ -84,10 +81,12 @@ def register_user(session: SessionDep, user_in: UserCreate, response: Response):
     session.refresh(user)
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRES_MINUTES)
-    access_token = create_access_token({"sub": user.email}, access_token_expires)
+    access_token = create_token({"sub": user.email}, access_token_expires)
 
     refresh_token_expires = timedelta(minutes=settings.REFRESH_TOKEN_EXPIRES_MINUTES)
-    refresh_token = create_refresh_token({"sub": user.email}, refresh_token_expires)
+    refresh_token = create_token(
+        {"sub": user.email}, refresh_token_expires, type="refresh"
+    )
 
     response.set_cookie(
         key="refresh_token",
@@ -141,6 +140,6 @@ def refresh_access_token(
         raise credentials_exception
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRES_MINUTES)
-    access_token = create_access_token({"sub": token_payload.sub}, access_token_expires)
+    access_token = create_token({"sub": token_payload.sub}, access_token_expires)
 
     return Token(access_token=access_token, token_type="bearer")

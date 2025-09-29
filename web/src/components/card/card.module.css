@@ -23,19 +23,29 @@
   padding-inline: calc(var(--spacing) * 6);
 
   &:has(*[data-slot="card-action"]) {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 }
 
 .cardTitle {
   font-weight: var(--font-weight-semibold);
-  line-height: 1;
+  line-height: 1.25;
+
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cardDescription {
   color: var(--muted-foreground);
   font-size: var(--text-sm);
   line-height: var(--text-sm--line-height);
+
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cardAction {

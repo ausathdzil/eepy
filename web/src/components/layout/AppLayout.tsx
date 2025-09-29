@@ -1,15 +1,9 @@
-import { Outlet, useNavigate } from 'react-router';
-import { mutate } from 'swr';
-import useSWRMutation from 'swr/mutation';
+import { Outlet } from 'react-router';
 
-import { useAuthStore } from '@/hooks/useAuthStore.ts';
 import { useUser } from '@/hooks/useUser.ts';
-import { logout } from '@/lib/actions/auth.ts';
-import { API_URL } from '@/lib/utils.ts';
 import { Stack } from '../containers/Containers.tsx';
 import { Link } from '../link/Link.tsx';
 import { Skeleton } from '../skeleton/Skeleton.tsx';
-import { Button } from '../ui/button.tsx';
 import { Header } from './Header.tsx';
 
 export function AppLayout() {
@@ -46,7 +40,9 @@ function UserButton() {
         <Link href="/profile" variant="secondary">
           Profile
         </Link>
-        <LogoutButton />
+        <Link href="/myurls" variant="secondary">
+          My URLs
+        </Link>
       </Stack>
     );
   }
@@ -56,36 +52,5 @@ function UserButton() {
       <Link href="/auth/login">Login</Link>
       <Link href="/auth/register">Register</Link>
     </Stack>
-  );
-}
-
-function LogoutButton() {
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
-  const navigate = useNavigate();
-
-  const { trigger, isMutating } = useSWRMutation(
-    `${API_URL}/auth/logout`,
-    logout
-  );
-
-  const handleLogout = async () => {
-    await trigger(null, {
-      onSuccess: () => {
-        setAccessToken(null);
-        mutate(() => true, undefined, { revalidate: false });
-        navigate('/auth/login', { replace: true });
-      },
-    });
-  };
-
-  return (
-    <Button
-      disabled={isMutating}
-      onClick={handleLogout}
-      size="sm"
-      variant="destructive"
-    >
-      Logout
-    </Button>
   );
 }

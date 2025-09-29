@@ -4,7 +4,7 @@ import jwt
 from app.config import settings
 from app.db import engine
 from app.models import TokenPayload, User
-from fastapi import Cookie, Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
@@ -20,7 +20,6 @@ def get_session():
 
 SessionDep = Annotated[Session, Depends(get_session)]
 TokenDep = Annotated[str, Depends(oauth2_scheme)]
-CookieDep = Annotated[str | None, Cookie()]
 
 
 def get_current_user(session: SessionDep, access_token: TokenDep):
