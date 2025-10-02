@@ -44,7 +44,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu.tsx';
 
-export default function UrlCard({
+export function UrlCard({
   url,
   showAction,
   className,

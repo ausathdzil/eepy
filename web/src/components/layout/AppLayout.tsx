@@ -2,9 +2,9 @@ import { Outlet } from 'react-router';
 
 import { useUser } from '@/hooks/useUser.ts';
 import { Stack } from '../containers/Containers.tsx';
+import { Header } from '../header/Header.tsx';
 import { Link } from '../link/Link.tsx';
 import { Skeleton } from '../skeleton/Skeleton.tsx';
-import { Header } from './Header.tsx';
 
 export function AppLayout() {
   return (
@@ -40,7 +40,7 @@ function UserButton() {
         <Link href="/profile" variant="secondary">
           Profile
         </Link>
-        <Link href="/myurls" variant="secondary">
+        <Link href="/profile/urls" variant="secondary">
           My URLs
         </Link>
       </Stack>

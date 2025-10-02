@@ -31,8 +31,10 @@ export default function App() {
             <Route element={<AppLayout />}>
               <Route element={<HomePage />} index />
               <Route element={<ProtectedLayout />}>
-                <Route element={<MyUrlsPage />} path="myurls" />
-                <Route element={<ProfilePage />} path="profile" />
+                <Route path="profile">
+                  <Route element={<ProfilePage />} index />
+                  <Route element={<MyUrlsPage />} path="urls" />
+                </Route>
                 <Route path="url">
                   <Route element={<UpdateUrlPage />} path=":url_id/update" />
                 </Route>

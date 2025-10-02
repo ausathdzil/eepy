@@ -1,4 +1,3 @@
-import { lazy, Suspense } from 'react';
 import { useSearchParams } from 'react-router';
 import useSWR from 'swr';
 
@@ -11,13 +10,12 @@ import {
 import { SearchInput } from '@/components/SearchInput.tsx';
 import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
 import { Title } from '@/components/typography/Typography.tsx';
+import { UrlCard } from '@/components/url/UrlCard.tsx';
 import { UrlContainer } from '@/components/url/UrlContainer.tsx';
 import { useUser } from '@/hooks/useUser.ts';
 import { getUrls } from '@/lib/data/url.ts';
 import { API_URL } from '@/lib/utils.ts';
 import type { Urls } from '@/types/url.ts';
-
-const UrlCard = lazy(() => import('@/components/url/UrlCard.tsx'));
 
 export default function MyUrls() {
   const { user, token } = useUser();
@@ -98,9 +96,7 @@ function UserUrls({
   return (
     <UrlContainer>
       {urls.data.map((url) => (
-        <Suspense fallback={<Skeleton className="h-42 w-full" />} key={url.id}>
-          <UrlCard showAction url={url} />
-        </Suspense>
+        <UrlCard key={url.id} showAction url={url} />
       ))}
     </UrlContainer>
   );

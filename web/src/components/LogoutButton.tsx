@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router';
 import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { useAuthStore } from '@/hooks/useAuthStore.tsx';
+import { useAuthStore } from '@/hooks/useAuthStore.ts';
 import { logout } from '@/lib/actions/auth.ts';
 import { API_URL } from '@/lib/utils.ts';
-import { Button } from '../ui/button.tsx';
+import { Button } from './ui/button.tsx';
 
 export function LogoutButton() {
   const setAccessToken = useAuthStore((state) => state.setAccessToken);

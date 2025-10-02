@@ -1,4 +1,4 @@
-import { lazy, Suspense, useId } from 'react';
+import { useId } from 'react';
 import { useParams } from 'react-router';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
@@ -10,13 +10,12 @@ import { Title } from '@/components/typography/Typography.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
+import { UrlCard } from '@/components/url/UrlCard';
 import { useUser } from '@/hooks/useUser.ts';
 import { updateUrl } from '@/lib/actions/url.ts';
 import { getUrl } from '@/lib/data/url.ts';
 import { API_URL, BASE_URL } from '@/lib/utils.ts';
 import type { Url } from '@/types/url.ts';
-
-const UrlCard = lazy(() => import('@/components/url/UrlCard.tsx'));
 
 export default function UpdateUrl() {
   const { user, token } = useUser();
@@ -69,9 +68,7 @@ function UpdateUrlContent({
   return (
     <Stack align="center" gap="8" justify="center">
       <UpdateUrlForm token={token} url={url} />
-      <Suspense fallback={<Skeleton className="h-42 w-full max-w-md" />}>
-        <UrlCard className="max-w-md" showAction={false} url={url} />
-      </Suspense>
+      <UrlCard className="max-w-md" showAction={false} url={url} />
     </Stack>
   );
 }
