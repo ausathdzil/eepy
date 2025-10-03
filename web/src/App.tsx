@@ -9,8 +9,9 @@ import { ProtectedLayout } from './components/layout/ProtectedLayout.tsx';
 import { UserProvider } from './components/UserProvider.tsx';
 
 const HomePage = lazy(() => import('./routes/Home.tsx'));
-const ProfilePage = lazy(() => import('./routes/Profile.tsx'));
-const MyUrlsPage = lazy(() => import('./routes/MyUrls.tsx'));
+const ProfilePage = lazy(() => import('./routes/profile/Profile.tsx'));
+const MyUrlsPage = lazy(() => import('./routes/profile/MyUrls.tsx'));
+const SettingsPage = lazy(() => import('./routes/profile/Settings.tsx'));
 const UpdateUrlPage = lazy(() => import('./routes/url/UpdateUrl.tsx'));
 const LoginPage = lazy(() => import('./routes/auth/Login.tsx'));
 const RegisterPage = lazy(() => import('./routes/auth/Register.tsx'));
@@ -34,6 +35,7 @@ export default function App() {
                 <Route path="profile">
                   <Route element={<ProfilePage />} index />
                   <Route element={<MyUrlsPage />} path="urls" />
+                  <Route element={<SettingsPage />} path="settings" />
                 </Route>
                 <Route path="url">
                   <Route element={<UpdateUrlPage />} path=":url_id/update" />

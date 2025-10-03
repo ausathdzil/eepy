@@ -8,22 +8,27 @@ import {
 import { MainContainer } from '@/components/containers/Containers.tsx';
 import { LogoutButton } from '@/components/LogoutButton.tsx';
 import { Link } from '@/components/link/Link.tsx';
-import { Skeleton } from '@/components/skeleton/Skeleton';
+import { Skeleton } from '@/components/skeleton/Skeleton.tsx';
 import { Title } from '@/components/typography/Typography.tsx';
 import { useUser } from '@/hooks/useUser.ts';
 
 export default function Profile() {
+  const { user, isLoading, error } = useUser();
+
   return (
     <MainContainer>
       <Title>Profile</Title>
-      <ProfileCard />
+      <ProfileCard error={error} isLoading={isLoading} user={user} />
     </MainContainer>
   );
 }
 
-function ProfileCard() {
-  const { user, isLoading, error } = useUser();
+type ProfileCardProps = Pick<
+  ReturnType<typeof useUser>,
+  'user' | 'isLoading' | 'error'
+>;
 
+function ProfileCard({ user, isLoading, error }: ProfileCardProps) {
   if (error) {
     return <div>{error.message}</div>;
   }
