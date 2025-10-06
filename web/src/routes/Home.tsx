@@ -89,7 +89,7 @@ function ShortenUrlForm({ token }: { token: string | null | undefined }) {
     const longUrl = formData.get('long_url') as string;
     const shortUrl = formData.get('short_url') as string;
     await trigger(
-      { token, long_url: longUrl, short_url: shortUrl },
+      { token, longUrl, shortUrl },
       {
         onSuccess: () => {
           mutate((key) => Array.isArray(key) && key[0] === `${API_URL}/url`);

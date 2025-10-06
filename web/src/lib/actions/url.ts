@@ -3,8 +3,8 @@ import type { Url } from '@/types/url.ts';
 type UrlArg = {
   arg: {
     token: string | null | undefined;
-    short_url: string;
-    long_url: string;
+    shortUrl: string;
+    longUrl: string;
   };
 };
 
@@ -12,6 +12,11 @@ export async function shortenUrl(
   url: RequestInfo | URL,
   { arg }: UrlArg
 ): Promise<Url | { detail: string }> {
+  const payload = {
+    long_url: arg.longUrl,
+    shortenUrl: arg.shortUrl,
+  };
+
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -19,7 +24,7 @@ export async function shortenUrl(
       Authorization: `Bearer ${arg.token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(arg),
+    body: JSON.stringify(payload),
   });
 
   const data = await res.json();
@@ -37,6 +42,16 @@ export async function updateUrl(
   url: RequestInfo | URL,
   { arg }: Partial<UrlArg>
 ) {
+  const payload: Record<string, string> = {};
+
+  if (arg?.longUrl) {
+    payload.long_url = arg.longUrl;
+  }
+
+  if (arg?.shortUrl) {
+    payload.short_url = arg.shortUrl;
+  }
+
   const res = await fetch(url, {
     method: 'PATCH',
     headers: {
@@ -44,10 +59,7 @@ export async function updateUrl(
       Authorization: `Bearer ${arg?.token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      long_url: arg?.long_url,
-      short_url: arg?.short_url,
-    }),
+    body: JSON.stringify(payload),
   });
 
   const data = await res.json();

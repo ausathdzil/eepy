@@ -59,7 +59,7 @@ export function UrlCard({
       key={url.id}
       {...props}
     >
-      <CardHeader className="">
+      <CardHeader>
         <Stack direction="column" gap="1">
           <CardTitle>
             <a href={`/u/${url.short_url}`} target="_blank">

@@ -93,7 +93,7 @@ function UpdateUrlForm({
     const longUrl = formData.get('long_url') as string;
     const shortUrl = formData.get('short_url') as string;
     await trigger(
-      { token, long_url: longUrl, short_url: shortUrl },
+      { token, longUrl, shortUrl },
       {
         onSuccess: () => {
           mutate(
@@ -105,7 +105,7 @@ function UpdateUrlForm({
   };
 
   return (
-    <Card className="w-full md:max-w-md">
+    <Card className="w-full max-w-md">
       <form className="space-y-4" onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -114,7 +114,7 @@ function UpdateUrlForm({
               defaultValue={url.long_url}
               id={`${id}-long_url`}
               name="long_url"
-              placeholder="https://example.com"
+              placeholder={url.long_url}
               required
               type="url"
             />
@@ -130,7 +130,8 @@ function UpdateUrlForm({
                 defaultValue={url.short_url}
                 id={`${id}-short_url`}
                 name="short_url"
-                placeholder="blog"
+                placeholder={url.short_url}
+                required
                 type="text"
               />
             </div>
