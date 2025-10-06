@@ -79,6 +79,10 @@ class UrlsPublic(SQLModel):
     has_previous: bool
 
 
+class UrlCount(SQLModel):
+    count: int
+
+
 class Token(SQLModel):
     access_token: str
     token_type: str

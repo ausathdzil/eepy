@@ -40,9 +40,6 @@ function UserButton() {
         <Link href="/profile" variant="secondary">
           Profile
         </Link>
-        <Link href="/profile/urls" variant="secondary">
-          My URLs
-        </Link>
       </Stack>
     );
   }

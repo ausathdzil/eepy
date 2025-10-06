@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from fastapi import APIRouter, Response, status
 from fastapi.exceptions import HTTPException
 
@@ -27,6 +28,7 @@ def update_me(session: SessionDep, current_user: CurrentUser, user_in: UserUpdat
 
     user_data = user_in.model_dump(exclude_unset=True)
     _ = current_user.sqlmodel_update(user_data)
+    current_user.updated_at = datetime.now(timezone.utc)
     session.add(current_user)
     session.commit()
     session.refresh(current_user)

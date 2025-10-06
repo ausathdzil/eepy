@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import Annotated
 
 from app.deps import CurrentUser, SessionDep
-from app.models import Url, UrlCreate, UrlPublic, UrlUpdate, UrlsPublic
+from app.models import Url, UrlCount, UrlCreate, UrlPublic, UrlUpdate, UrlsPublic
 from fastapi import APIRouter, HTTPException, Query, status
 from fastapi.responses import RedirectResponse
 from sqlmodel import and_, col, func, or_, select
@@ -98,6 +98,14 @@ def read_urls(
         has_next=has_next,
         has_previous=has_previous,
     )
+
+
+@router.get("/total", response_model=UrlCount)
+def get_total_url(session: SessionDep, current_user: CurrentUser):
+    base_statement = select(Url).where(Url.user_id == current_user.id)
+    count_statement = select(func.count()).select_from(base_statement.subquery())
+    count = session.exec(count_statement).one()
+    return UrlCount(count=count)
 
 
 @router.get("/{url_id}", response_model=UrlPublic)

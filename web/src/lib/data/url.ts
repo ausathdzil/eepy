@@ -74,3 +74,26 @@ export async function getUrl(
 
   return data;
 }
+
+export async function getTotalUrl(
+  url: RequestInfo | URL,
+  token: string | null | undefined
+): Promise<{ count: number }> {
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(
+      data.detail[0].msg || data.detail || 'Failed to fetch total URLs'
+    );
+  }
+
+  return data;
+}
